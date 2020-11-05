@@ -40,6 +40,6 @@ Usage of ESP8266 WifiPhisher for attacking infrastructures without prior mutual 
 
 ## Note
 * Beware of websites pretending to be related to the ESP8266 WifiPhisher Project. They may be distributing malware.
-* There is no way to inject packets on the ESP32
+* WifiPhisher does not work on esp32. There is no way to inject packets on the ESP32
 
 ## This source code is built on [Deauther](https://github.com/SpacehuhnTech/esp8266_deauther)
