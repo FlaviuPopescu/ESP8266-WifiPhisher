@@ -32,7 +32,7 @@ First you have to install and open the Arduino IDE.
 - Check your upload settings and press upload!
 [Libraries](https://drive.google.com/drive/folders/1QKlt-UVW6BszD1YrvQ47xcYCMHJUfeuS?usp=sharing)
 
-## :octocat: How to contribute
+## :octocat: Contribute
 All contributions are welcome! Code, documentation, graphics, or even design suggestions are welcome; use GitHub to its fullest. Submit pull requests, contribute tutorials -- whatever you have to offer, it'll be appreciated
 
 ## Disclaimer
