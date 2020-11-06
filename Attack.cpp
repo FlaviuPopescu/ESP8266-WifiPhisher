@@ -20,12 +20,13 @@ Attack::Attack() {
 
 void Attack::start() {
   stop();
+  digitalWrite(D4, LOW);
   prntln(A_START);
   attackTime = currentTime;
   attackStartTime = currentTime;
   accesspoints.sortAfterChannel();
   stations.sortAfterChannel();
-  digitalWrite(D4, LOW);
+
   running = true;
 }
 
