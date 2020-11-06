@@ -1,0 +1,45 @@
+CHANNEL
+uint8_t channel = 1;
+Default WiFi channel that is used when starting.
+
+DISPLAYTIMEOUT
+uint32_t displayTimeout = 600
+Time in seconds after which the display turns off when inactive.
+To disable the display timeout, set it to 0.
+
+MAX-CH
+uint8_t maxCh = 13;
+Max channel to scan on.
+US = 11, EU = 13, Japan = 14.
+
+CH-TIME
+uint16_t chTime = 384;
+Time for scanning one channel before going to the next in milliseconds (only if channel hopping is enabled).
+
+MINDEAUTHS
+uint16_t minDeauths = 3
+Minimum number of deauthentication frames when scanning to change the LED to deauth mode.
+
+ATTACKTIMEOUT
+uint32_t attackTimeout = 600
+After what amount of time (in seconds) the attack will stop automatically.
+Set it to 0 to disable it.
+
+FORCE-PACKETS
+uint8_t forcePackets = 1;
+How many attempts to send out a packet.
+Set this value higher if you want to achieve a better packet rate in a busy area.
+Be careful this setting could make the device slower or more unstable.
+Max value is 255.
+
+DEAUTHS-PER-TARGET
+uint16_t deauthsPerTarget = 10;
+How many deauthentication and disassociation frames are sent out for each target.
+
+DEAUTH-REASON
+uint8_t deauthReason = 1;
+The reason code that is sent with the deauth frames to tell the target device why the connection will be closed.
+
+PROBESPERSSID
+uint8_t probesPerSSID = 1
+How many probe request frames are sent for each SSID.
