@@ -178,6 +178,5 @@ void loop() {
     booted = true;
     digitalWrite(D4, HIGH);
   }
-//  :)
-  
+//  fix bugs
 }
