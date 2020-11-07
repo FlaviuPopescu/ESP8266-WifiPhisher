@@ -1,6 +1,7 @@
 /*ESP8266 WifiPhisher
- * Facebook.com/vuongk03
- * 0971.282.336
+ * Facebook.com/244v234
+ * https://github.com/244v234/ESP8266-WifiPhisher
+ * https://hackster.io.com/244v234
  * vanvuonghp234@gmail.com
  */
 
