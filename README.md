@@ -38,7 +38,7 @@ All contributions are welcome! Code, documentation, graphics, or even design sug
 Currently, the ESP8266 WifiPhisher has limited software capabilities. New firmware features will be added over time and will eventually reach the point where this project becomes the smallest hacking machine.
 
 ## Disclaimer
-Currently, the ESP8266 WifiPhisher has limited software capabilities. New firmware features will be added over time and will eventually reach the point where this project becomes the smallest hacking machine.
+Usage of ESp8266 Wifiphisher for attacking infrastructures without prior mutual consistency can be considered as an illegal activity. It is the final user's responsibility to obey all applicable local, state and federal laws. Authors assume no liability and are not responsible for any misuse or damage caused by this program.
 
 ## Note
 * Beware of websites pretending to be related to the ESP8266 WifiPhisher Project. They may be distributing malware.
