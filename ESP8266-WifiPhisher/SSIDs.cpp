@@ -7,8 +7,6 @@ SSIDs::SSIDs() {
 void SSIDs::load() {
     internal_removeAll();
     DynamicJsonBuffer jsonBuffer(4000);
-
-    checkFile(FILE_PATH, str(SS_JSON_DEFAULT));
     JsonObject& obj = parseJSONFile(FILE_PATH, jsonBuffer);
     JsonArray & arr = obj.get<JsonArray>(str(SS_JSON_SSIDS));
 
@@ -16,8 +14,6 @@ void SSIDs::load() {
         JsonArray& tmpArray = arr.get<JsonVariant>(i);
         internal_add(tmpArray.get<String>(0), tmpArray.get<bool>(1), tmpArray.get<int>(2));
     }
-
-    prnt(SS_LOADED);
     prntln(FILE_PATH);
 }
 
@@ -31,7 +27,6 @@ void SSIDs::load(String filepath) {
 
 void SSIDs::removeAll() {
     internal_removeAll();
-    prntln(SS_CLEARED);
     changed = true;
 }
 
@@ -45,7 +40,6 @@ void SSIDs::save(bool force) {
            String(OPEN_BRACKET);                        // "ssids":[
 
     if (!writeFile(FILE_PATH, buf)) {
-        prnt(F_ERROR_SAVING);
         prntln(FILE_PATH);
         return;
     }
@@ -65,7 +59,6 @@ void SSIDs::save(bool force) {
 
         if (buf.length() >= 1024) {
             if (!appendFile(FILE_PATH, buf)) {
-                prnt(F_ERROR_SAVING);
                 prntln(FILE_PATH);
                 return;
             }
@@ -77,12 +70,9 @@ void SSIDs::save(bool force) {
     buf += String(CLOSE_BRACKET) + String(CLOSE_CURLY_BRACKET); // ]}
 
     if (!appendFile(FILE_PATH, buf)) {
-        prnt(F_ERROR_SAVING);
         prntln(FILE_PATH);
         return;
     }
-
-    prnt(SS_SAVED_IN);
     prntln(FILE_PATH);
     changed = false;
 }
@@ -148,22 +138,17 @@ String SSIDs::getEncStr(int num) {
 
 void SSIDs::remove(int num) {
     if (!check(num)) return;
-
     internal_remove(num);
-    prnt(SS_REMOVED);
     prntln(getName(num));
     changed = true;
 }
 
 String SSIDs::randomize(String name) {
     int ssidlen = name.length();
-
     if (ssidlen > 32) name = name.substring(0, 32);
-
     if (ssidlen < 32) {
         for (int i = ssidlen; i < 32; i++) {
             int rnd = random(3);
-
             if ((i < 29) && (rnd == 0)) { // ZERO WIDTH SPACE
                 name += char(0xE2);
                 name += char(0x80);
@@ -186,7 +171,6 @@ void SSIDs::add(String name, bool wpa2, int clones, bool force) {
         if (force) {
             internal_remove(0);
         } else {
-            prntln(SS_ERROR_FULL);
             return;
         }
     }
@@ -198,8 +182,6 @@ void SSIDs::add(String name, bool wpa2, int clones, bool force) {
 
         if (list->size() > SSID_LIST_SIZE) internal_remove(0);
     }
-
-    prnt(SS_ADDED);
     prntln(name);
     changed = true;
 }
@@ -234,8 +216,6 @@ void SSIDs::replace(int num, String name, bool wpa2) {
     newSSID.wpa2 = wpa2;
     newSSID.len  = (uint8_t)len;
     list->replace(num, newSSID);
-
-    prnt(SS_REPLACED);
     prntln(name);
     changed = true;
 }
@@ -248,24 +228,18 @@ void SSIDs::print(int num, bool header, bool footer) {
     if (!check(num)) return;
 
     if (header) {
-        prntln(SS_TABLE_HEADER);
-        prntln(SS_TABLE_DIVIDER);
     }
 
     prnt(leftRight(String(), (String)num, 2));
     prnt(leftRight(String(SPACE), getEncStr(num), 5));
     prntln(leftRight(String(SPACE) + getName(num), String(), 33));
 
-    if (footer) prntln(SS_TABLE_DIVIDER);
 }
 
 void SSIDs::printAll() {
-    prntln(SS_HEADER);
     int c = count();
 
-    if (c == 0) prntln(SS_ERROR_EMPTY);
-    else
-        for (int i = 0; i < c; i++) print(i, i == 0, i == c - 1);
+    if (c != 0) for (int i = 0; i < c; i++) print(i, i == 0, i == c - 1);
 }
 
 int SSIDs::count() {
@@ -279,14 +253,12 @@ bool SSIDs::check(int num) {
 void SSIDs::enableRandom(uint32_t randomInterval) {
     randomMode            = true;
     SSIDs::randomInterval = randomInterval;
-    prntln(SS_RANDOM_ENABLED);
     update();
 }
 
 void SSIDs::disableRandom() {
     randomMode = false;
     internal_removeAll();
-    prntln(SS_RANDOM_DISABLED);
 }
 
 void SSIDs::internal_add(String name, bool wpa2, int len) {
