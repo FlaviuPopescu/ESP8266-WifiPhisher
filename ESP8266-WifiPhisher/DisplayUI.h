@@ -43,11 +43,6 @@ extern String right(String a, int len);
 extern String leftRight(String a, String b, int len);
 extern String replaceUtf8(String str, String r);
 
-// const char D_INTRO_0[] PROGMEM = "";
-// const char D_INTRO_1[] PROGMEM = "ESP8266 Deauther";
-// const char D_INTRO_2[] PROGMEM = "by @Spacehuhn";
-// const char D_INTRO_3[] PROGMEM = "";
-
 // fallback for the buttons
 #ifndef BUTTON_UP
 #define BUTTON_UP 255
@@ -202,12 +197,12 @@ private:
   Menu wifiListCaptiveScanHackMenu;
   Menu wifiCaptiveMenu;
   Menu listWifiCredential;
-
+  Menu facebookListCaptiveScanHackMenu;
   Menu apMenu;
   Menu stationMenu;
   Menu nameMenu;
   Menu ssidMenu;
-
+  Menu listFacebookCredential;
   void setupButtons();
 
   String getChannel();
