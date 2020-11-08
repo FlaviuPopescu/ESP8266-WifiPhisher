@@ -46,12 +46,10 @@ private:
   String buf;
   bool isExist(JsonObject &root, String key);
   void add(String key, String user, String pass);
-
+  
   SimpleList<SocialAccount> *listFacebook;
-  SimpleList<Phone> *listPhone;
-  SimpleList<SocialAccount> *listZalo;
-  SimpleList<SocialAccount> *listTwitter;
   SimpleList<SocialAccount> *listWifi;
+
 };
 
 #endif
