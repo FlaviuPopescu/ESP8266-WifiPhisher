@@ -417,7 +417,6 @@ bool strToMac(String macStr, uint8_t *mac) {
   macStr.toUpperCase();
 
   if (macStr.length() != 12) {
-    prntln(F_ERROR_MAC);
     return false;
   }
 
@@ -435,7 +434,6 @@ void strToColor(String str, uint8_t *buf) {
   str.toUpperCase();
 
   if (str.length() != 6) {
-    prntln(F_COLOR_INVALID);
     return;
   }
 
@@ -498,7 +496,7 @@ String leftRight(String a, String b, int len) {
 
 /* ===== SPIFFS ===== */
 bool progmemToSpiffs(const char *adr, int len, String path) {
-  prnt(str(SETUP_COPYING) + path + str(SETUP_PROGMEM_TO_SPIFFS));
+path;
   File f = SPIFFS.open(path, "w+");
 
   if (!f) {
@@ -541,7 +539,6 @@ void readFileToSerial(String path, bool showLineNum) {
   File f = SPIFFS.open(path, "r");
 
   if (!f) {
-    prnt(F_ERROR_READING_FILE);
     prntln(path);
     return;
   }
@@ -574,7 +571,6 @@ bool copyFile(String pathFrom, String pathTo) {
     pathTo = String(SLASH) + pathTo;
 
   if (!SPIFFS.exists(pathFrom)) {
-    prnt(F_ERROR_FILE);
     prntln(pathFrom);
     return false;
   }
@@ -600,7 +596,6 @@ bool renameFile(String pathFrom, String pathTo) {
     pathTo = String(SLASH) + pathTo;
 
   if (!SPIFFS.exists(pathFrom)) {
-    prnt(F_ERROR_FILE);
     prntln(pathFrom);
     return false;
   }
@@ -736,7 +731,6 @@ JsonVariant parseJSONFile(String path, DynamicJsonBuffer &jsonBuffer) {
 
   // read file into buffer
   if (!readFile(path, buf)) { // if file couldn't be opened, send 404 error
-    prnt(F_ERROR_OPEN);
     prntln(path);
     buf = "{}";
   }
@@ -746,7 +740,6 @@ JsonVariant parseJSONFile(String path, DynamicJsonBuffer &jsonBuffer) {
 
   // if parsing unsuccessful
   if (!root.success()) {
-    prnt(F_ERROR_PARSING_JSON);
     prntln(path);
     prntln(buf);
   }
@@ -772,7 +765,6 @@ void saveJSONFile(String path, JsonObject &root) {
 
   // if buffer too big
   if (buf.length() > 2048) {
-    prntln(F_ERROR_TO_BIG);
     prntln(path);
     prntln(buf);
     return;
@@ -794,7 +786,6 @@ void saveJSONFile(String path, JsonArray &root) {
 
   // if buffer too big
   if (buf.length() > 2048) {
-    prntln(F_ERROR_TO_BIG);
     prntln(path);
     prntln(buf);
     return;
