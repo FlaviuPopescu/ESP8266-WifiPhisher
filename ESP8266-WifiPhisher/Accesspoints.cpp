@@ -36,22 +36,17 @@ void Accesspoints::add(uint8_t id, bool selected) {
 }
 
 void Accesspoints::printAll() {
-  prntln(AP_HEADER);
   int c = count();
 
-  if (c == 0)
-    prntln(AP_LIST_EMPTY);
-  else
+  if (c != 0)
     for (int i = 0; i < c; i++)
       print(i, i == 0, i == c - 1);
 }
 
 void Accesspoints::printSelected() {
-  prntln(AP_HEADER);
   int max = selected();
 
   if (selected() == 0) {
-    prntln(AP_NO_AP_SELECTED);
     return;
   }
   int c = count();
@@ -71,10 +66,7 @@ void Accesspoints::print(int num, bool header, bool footer) {
   if (!check(num))
     return;
 
-  if (header) {
-    prntln(AP_TABLE_HEADER);
-    prntln(AP_TABLE_DIVIDER);
-  }
+  if (header);
   prnt(leftRight(String(), (String)num, 2));
   prnt(leftRight(String(SPACE) + getSSID(num), String(), 33));
   prnt(leftRight(String(SPACE) + getNameStr(num), String(), 17));
@@ -85,9 +77,7 @@ void Accesspoints::print(int num, bool header, bool footer) {
   prnt(leftRight(String(SPACE) + getVendorStr(num), String(), 9));
   prntln(leftRight(String(SPACE) + getSelectedStr(num), String(), 9));
 
-  if (footer) {
-    prntln(AP_TABLE_DIVIDER);
-  }
+  if (footer);
 }
 
 String Accesspoints::getSSID(int num) {
@@ -215,8 +205,6 @@ void Accesspoints::select(int num) {
     return;
 
   internal_select(num);
-
-  prnt(AP_SELECTED);
   prntln(getSSID(num));
 
   changed = true;
@@ -227,8 +215,6 @@ void Accesspoints::deselect(int num) {
     return;
 
   internal_deselect(num);
-
-  prnt(AP_DESELECTED);
   prntln(getSSID(num));
 
   changed = true;
@@ -237,8 +223,6 @@ void Accesspoints::deselect(int num) {
 void Accesspoints::remove(int num) {
   if (!check(num))
     return;
-
-  prnt(AP_REMOVED);
   prntln(getSSID(num));
 
   internal_remove(num);
@@ -270,21 +254,18 @@ void Accesspoints::remove(String ssid) {
 void Accesspoints::selectAll() {
   for (int i = 0; i < count(); i++)
     list->replace(i, AP{list->get(i).id, true});
-  prntln(AP_SELECTED_ALL);
   changed = true;
 }
 
 void Accesspoints::deselectAll() {
   for (int i = 0; i < count(); i++)
     list->replace(i, AP{list->get(i).id, false});
-  prntln(AP_DESELECTED_ALL);
   changed = true;
 }
 
 void Accesspoints::removeAll() {
   while (count() > 0)
     internal_remove(0);
-  prntln(AP_REMOVED_ALL);
   changed = true;
 }
 
@@ -311,8 +292,6 @@ int Accesspoints::selected() {
 bool Accesspoints::check(int num) {
   if (internal_check(num))
     return true;
-
-  prnt(AP_NO_AP_ERROR);
   prntln((String)num);
   return false;
 }
