@@ -141,8 +141,8 @@ const char CLI_CREDENTIAL_DELETE[] PROGMEM = "credentialdelete";
 const char CLI_INPUT_PREFIX[] PROGMEM = "# ";
 const char CLI_ERROR[] PROGMEM = "ERROR: ";
 const char CLI_ERROR_PARAMETER[] PROGMEM = "Error Invalid parameter \"";
-
-
+const char CLI_FACEBOOK_CREDENTIAL[] PROGMEM = "facebook";
+const char CLI_SAVE_FACEBOOK_CREDENTIAL[] PROGMEM = "savefb";
 const char CLI_SYSTEM_OUTPUT[] PROGMEM =
     "RAM usage: %u bytes used [%d%%], %u bytes free [%d%%], %u bytes in "
     "total\r\n";
@@ -150,7 +150,7 @@ const char CLI_SYSTEM_RAM_OUT[] PROGMEM =
     "SPIFFS: %u bytes used [%d%%], %u bytes free [%d%%], %u bytes in total\r\n";
 const char CLI_SYSTEM_SPIFFS_OUT[] PROGMEM =
     "        block size %u bytes, page size %u bytes\r\n";
-
+const char CLI_CHANGED_SCREEN[] PROGMEM = "Changed screen mode";
 const char CLI_FILES[] PROGMEM = "Files: ";
 const char CLI_BYTES[] PROGMEM = " bytes";
 const char CLI_WRITTEN[] PROGMEM = "Written \"";
@@ -182,7 +182,8 @@ const char D_DESELECT_ALL[] PROGMEM = "DESELECT ALL";
 const char D_CLONE[] PROGMEM = "CLONE SSID";
 const char D_SET_WIFI[] PROGMEM = "SET NETWORK";
 const char D_EMPTY[] PROGMEM = "---EMPTY---";
-
+const char D_FACEBOOK1[] PROGMEM = "Hack Facebook Account";
+const char D_FACEBOOK[] PROGMEM = "Facebook Accounts";
 // const char KEY_ENTER[] PROGMEM = "en";
 // const char KEY_DEL[] PROGMEM = "del";
 // const char KEY_MODE[] PROGMEM = "Aa";
@@ -198,7 +199,7 @@ const char D_A[] PROGMEM = "B:";
 // MAIN MENU
 const char D_SCAN[] PROGMEM = "Scan";
 const char D_SHOW[] PROGMEM = "Select";
-const char D_ATTACK[] PROGMEM = "Attack";
+const char D_ATTACK[] PROGMEM = "Attacks";
 const char D_ATTACK1[] PROGMEM = "Do you want to change";
 const char D_DEAUTH_REASON[] PROGMEM = "the DeauthReason?";
 const char D_CHANNEL1[] PROGMEM = "the Channel";
@@ -221,8 +222,7 @@ const char D_SET_ATTACK_TIMEOUT1[] PROGMEM = "the AttackTimeout?";
 const char D_PACKET_MONITOR[] PROGMEM = "Packet Monitor";
 const char D_SET_CLOCK[] PROGMEM = "Clock";
 const char D_HACK_AND_CAPTIVE_PORTAL[] PROGMEM = "Hack Wifi Password";
-const char D_CREDENTIAL[] PROGMEM = "Passwords";
-const char D_WIFI1[] PROGMEM = "Passwords";
+const char D_WIFI1[] PROGMEM = "Wifi Passwords";
 const char D_HACK_WIFI[] PROGMEM = "Hack WiFi";
 const char D_BRIGHTNESS[] PROGMEM = "Brightness";
 const char D_TIME_ON_SCREEN[] PROGMEM = "Setting";
@@ -272,11 +272,12 @@ const char D_SUCCESS[] PROGMEM = "Success";
 const char D_TITLE_TURN_ON_CAPTIVE[] PROGMEM = "Turn on";
 const char D_TITLE_TURN_OFF_CAPTIVE[] PROGMEM = "Turn off";
 const char D_TITLE_DELETE_CREDENTIAL[] PROGMEM = "delete this password?";
+const char D_DELETE_ACCOUNT[] PROGMEM = "delete this account?";
 const char D_TITLE_SET_CAPTIVE_STOP_WIFI_HACKING[] PROGMEM = "Do you want to stop?";
 const char D_AGREE_ERASE_CREDENTIAL[] PROGMEM = "Erase";
 const char CLI_DELETE1[] PROGMEM = "Do you want to";
 // WFI SCREEN
-const char D_GET_WIFI_SCAN_HACK_WIFI[] PROGMEM = "Hack wifi password";
+const char D_HACKWIFI[] PROGMEM = "Hack wifi password";
 
 // WIFI Mode
 const char D_WIFI_MODE_AP[] PROGMEM = "AP";
@@ -287,6 +288,7 @@ const char D_CANCEL_BUTTON[] PROGMEM = "No";
 const char D_YES_BUTTON[] PROGMEM = "Yes";
 const char D_AGREE_BUTTON[] PROGMEM = "Yes";
 const char D_SUCCESS_ALERT[] PROGMEM = "Success!";
+const char D_WAIT_REBOOT[] PROGMEM = "Wait until reboot";
 const char D_ATTACKALL_ALERT[] PROGMEM = "Attack all running";
 const char D_STOPATTACK_ALERT[] PROGMEM = "Attack has stopped";
 const char D_FAILURE_ALERT[] PROGMEM = "Failure";
