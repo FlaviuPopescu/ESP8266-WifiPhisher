@@ -18,8 +18,6 @@ void Names::load() {
                          4), false);
         sort();
     }
-
-    prnt(N_LOADED);
     prntln(FILE_PATH);
 }
 
@@ -34,14 +32,11 @@ void Names::load(String filepath) {
 void Names::save(bool force) {
     if (!force && !changed) {
         return;
-
-        prntln(N_SAVED);
     }
 
     String buf = String(OPEN_BRACKET); // [
 
     if (!writeFile(FILE_PATH, buf)) {
-        prnt(F_ERROR_SAVING);
         prntln(FILE_PATH);
         return;
     }
@@ -65,7 +60,6 @@ void Names::save(bool force) {
 
         if (buf.length() >= 1024) {
             if (!appendFile(FILE_PATH, buf)) {
-                prnt(F_ERROR_SAVING);
                 prntln(FILE_PATH);
                 return;
             }
@@ -77,12 +71,9 @@ void Names::save(bool force) {
     buf += String(CLOSE_BRACKET); // ]
 
     if (!appendFile(FILE_PATH, buf)) {
-        prnt(F_ERROR_SAVING);
         prntln(FILE_PATH);
         return;
     }
-
-    prnt(N_SAVED);
     prntln(FILE_PATH);
     changed = false;
 }
@@ -104,14 +95,11 @@ void Names::sort() {
 
 void Names::removeAll() {
     internal_removeAll();
-    prntln(N_REMOVED_ALL);
     changed = true;
 }
 
 bool Names::check(int num) {
     if (internal_check(num)) return true;
-
-    prnt(N_ERROR_NOT_FOUND);
     prntln(num);
     return false;
 }
@@ -139,8 +127,6 @@ void Names::print(int num, bool header, bool footer) {
     if (!check(num)) return;
 
     if (header) {
-        prntln(N_TABLE_HEADER);
-        prntln(N_TABLE_DIVIDER);
     }
 
     prnt(leftRight(String(), (String)num, 2));
@@ -150,26 +136,20 @@ void Names::print(int num, bool header, bool footer) {
     prnt(leftRight(String(SPACE) + getBssidStr(num), String(), 18));
     prnt(leftRight(String(SPACE), (String)getCh(num), 3));
     prntln(leftRight(String(SPACE) + getSelectedStr(num), String(), 9));
-
-    if (footer) prntln(N_TABLE_DIVIDER);
 }
 
 void Names::printAll() {
-    prntln(N_HEADER);
     int c = count();
 
-    if (c == 0) prntln(N_ERROR_LIST_EMPTY);
-    else
+    if (c != 0) 
         for (int i = 0; i < c; i++) print(i, i == 0, i == c - 1);
 }
 
 void Names::printSelected() {
-    prntln(N_TABLE_HEADER);
     int max = selected();
     int c   = count();
 
     if (max == 0) {
-        prntln(N_ERROR_NO_SELECTED);
         return;
     }
 
@@ -185,7 +165,6 @@ void Names::add(uint8_t* mac, String name, uint8_t* bssid, uint8_t ch, bool sele
     if (count() >= NAME_LIST_SIZE) {
         if (force) internal_remove(0);
         else {
-            prntln(N_ERROR_LIST_FULL);
             return;
         }
     }
@@ -194,8 +173,6 @@ void Names::add(uint8_t* mac, String name, uint8_t* bssid, uint8_t ch, bool sele
 
     internal_add(mac, name, bssid, ch, selected);
     sort();
-
-    prnt(N_ADDED);
     prntln(name);
     changed = true;
 }
@@ -204,7 +181,6 @@ void Names::add(String macStr, String name, String bssidStr, uint8_t ch, bool se
     if (count() >= NAME_LIST_SIZE) {
         if (force) internal_remove(0);
         else {
-            prntln(N_ERROR_LIST_FULL);
             return;
         }
     }
@@ -213,8 +189,6 @@ void Names::add(String macStr, String name, String bssidStr, uint8_t ch, bool se
 
     internal_add(macStr, name, bssidStr, ch, selected);
     sort();
-
-    prnt(N_ADDED);
     prntln(name);
     changed = true;
 }
@@ -226,15 +200,12 @@ void Names::replace(int num, String macStr, String name, String bssidStr, uint8_
 
     internal_add(macStr, name, bssidStr, ch, selected);
     sort();
-    prnt(N_REPLACED);
     prntln(name);
     changed = true;
 }
 
 void Names::remove(int num) {
     if (!check(num)) return;
-
-    prnt(N_REMOVED);
     prntln(getName(num));
     internal_remove(num);
     changed = true;
@@ -244,9 +215,6 @@ void Names::setName(int num, String name) {
     if (!check(num)) return;
 
     internal_add(getMac(num), name, getBssid(num), getCh(num), getSelected(num));
-
-    prntln(N_CHANGED_NAME);
-
     internal_remove(num);
     sort();
     changed = true;
@@ -258,7 +226,6 @@ void Names::setMac(int num, String macStr) {
     uint8_t mac[6];
     strToMac(macStr, mac);
     internal_add(mac, getName(num), getBssid(num), getCh(num), getSelected(num));
-    prntln(N_CHANGED_MAC);
     internal_remove(num);
     sort();
     changed = true;
@@ -268,7 +235,6 @@ void Names::setCh(int num, uint8_t ch) {
     if (!check(num)) return;
 
     internal_add(getMac(num), getName(num), getBssid(num), ch, getSelected(num));
-    prntln(N_CHANGED_CH);
     internal_remove(num);
     sort();
     changed = true;
@@ -280,7 +246,6 @@ void Names::setBSSID(int num, String bssidStr) {
     uint8_t mac[6];
     strToMac(bssidStr, mac);
     internal_add(getMac(num), getName(num), mac, getCh(num), getSelected(num));
-    prntln(N_CHANGED_BSSID);
     internal_remove(num);
     sort();
     changed = true;
@@ -290,7 +255,6 @@ void Names::select(int num) {
     if (!check(num)) return;
 
     internal_select(num);
-    prnt(N_SELECTED);
     prntln(getName(num));
     changed = true;
 }
@@ -304,7 +268,6 @@ void Names::select(String name) {
             return;
         }
     }
-    prnt(N_ERROR_NOT_FOUND);
     prntln(name);
 }
 
@@ -312,7 +275,6 @@ void Names::deselect(int num) {
     if (!check(num)) return;
 
     internal_deselect(num);
-    prnt(N_DESELECTED);
     prntln(getName(num));
     changed = true;
 }
@@ -326,7 +288,6 @@ void Names::deselect(String name) {
             return;
         }
     }
-    prnt(N_ERROR_NOT_FOUND);
     prnt(name);
 }
 
@@ -334,14 +295,12 @@ void Names::selectAll() {
     int c = count();
 
     for (int i = 0; i < c; i++) internal_select(i);
-    prntln(N_SELECTED_ALL);
 }
 
 void Names::deselectAll() {
     int c = count();
 
     for (int i = 0; i < c; i++) internal_deselect(i);
-    prntln(N_DESELECTED_ALL);
 }
 
 uint8_t* Names::getMac(int num) {
