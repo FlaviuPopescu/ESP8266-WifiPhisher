@@ -19,11 +19,10 @@
 #define GPIO0
 
 #define WAKE_UP_PIN 14
-//#define DEAUTHER_DISPLAY SSD1306Wire display = SSD1306Wire(0x3c, 5, 4) // for
-// 0.96" OLED
-#define DEAUTHER_DISPLAY  SH1106Wire display = SH1106Wire(0x3c, 5, 4); // for 1.3" OLED
+
+//#define DEAUTHER_DISPLAY SSD1306Wire display = SSD1306Wire(0x3c, 5, 4) // for 0.96 OLED i2c
+#define DEAUTHER_DISPLAY  SH1106Wire display = SH1106Wire(0x3c, 5, 4); // for 1.3" OLED i2c
 
 //#define FLIP_DIPLAY // uncomment that to flip the display vertically
-
 
 #endif
