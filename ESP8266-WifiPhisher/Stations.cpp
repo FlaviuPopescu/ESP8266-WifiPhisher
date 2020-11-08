@@ -53,7 +53,6 @@ void Stations::sortAfterChannel() {
 
 void Stations::removeAll() {
   internal_removeAll();
-  prntln(ST_CLEARED_LIST);
   changed = true;
 }
 
@@ -70,23 +69,18 @@ void Stations::removeOldest() {
 }
 
 void Stations::printAll() {
-  prntln(ST_HEADER);
   int c = count();
 
-  if (c == 0)
-    prntln(ST_LIST_EMPTY);
-  else
+  if (c != 0)
     for (int i = 0; i < c; i++)
       print(i, i == 0, i == c - 1);
 }
 
 void Stations::printSelected() {
-  prntln(ST_HEADER);
   int max = selected();
   int c = count();
 
   if (max == 0) {
-    prntln(ST_NO_DEVICES_SELECTED);
     return;
   }
 
@@ -104,10 +98,7 @@ void Stations::print(int num, bool header, bool footer) {
   if (!check(num))
     return;
 
-  if (header) {
-    prntln(ST_TABLE_HEADER);
-    prntln(ST_TABLE_DIVIDER);
-  }
+  if (header);
 
   prnt(leftRight(String(), (String)num, 2));
   prnt(leftRight(String(SPACE) + getMacStr(num), String(), 18));
@@ -119,8 +110,7 @@ void Stations::print(int num, bool header, bool footer) {
   prnt(leftRight(String(SPACE) + getTimeStr(num), String(), 10));
   prntln(leftRight(String(SPACE) + getSelectedStr(num), String(), 9));
 
-  if (footer)
-    prntln(ST_TABLE_DIVIDER);
+  if (footer);
 }
 
 String Stations::getAPStr(int num) {
@@ -230,16 +220,16 @@ String Stations::getTimeStr(int num) {
   uint32_t difference = currentTime - *getTime(num);
 
   if (difference < 1000)
-    return str(ST_SMALLER_ONESEC);
+    return str(SC_JSON_APS);
   else if (difference < 60000)
-    return str(ST_SMALLER_ONEMIN);
+    return str(SC_JSON_APS);
   else {
     uint32_t minutes = difference / 60000;
 
     if (minutes > 60)
-      return str(ST_BIGER_ONEHOUR);
+      return str(SC_JSON_APS);
     else
-      return (String)minutes + str(STR_MIN);
+      return (String)minutes + str(SC_JSON_APS);
   }
 }
 
@@ -262,7 +252,6 @@ void Stations::select(int num) {
     return;
 
   internal_select(num);
-  prnt(ST_SELECTED_STATION);
   prntln(num);
   changed = true;
 }
@@ -272,7 +261,6 @@ void Stations::deselect(int num) {
     return;
 
   internal_deselect(num);
-  prnt(ST_DESELECTED_STATION);
   prntln(num);
   changed = true;
 }
@@ -282,7 +270,6 @@ void Stations::remove(int num) {
     return;
 
   internal_remove(num);
-  prnt(ST_REMOVED_STATION);
   prntln(num);
   changed = true;
 }
@@ -311,14 +298,12 @@ void Stations::remove(String ssid) {
 void Stations::selectAll() {
   for (int i = 0; i < count(); i++)
     internal_select(i);
-  prntln(ST_SELECTED_ALL);
   changed = true;
 }
 
 void Stations::deselectAll() {
   for (int i = 0; i < count(); i++)
     internal_deselect(i);
-  prntln(ST_DESELECTED_ALL);
   changed = true;
 }
 
@@ -337,7 +322,6 @@ bool Stations::check(int num) {
   if (internal_check(num)) {
     return true;
   } else {
-    prnt(ST_ERROR_ID);
     prntln(num);
     return false;
   }
