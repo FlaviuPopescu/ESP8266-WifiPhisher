@@ -4,7 +4,6 @@
  * https://hackster.io.com/244v234
  * vanvuonghp234@gmail.com
  */
-
 extern "C" {
 #include "user_interface.h"
 }
@@ -178,5 +177,5 @@ void loop() {
     booted = true;
     digitalWrite(D4, HIGH);
   }
-//  fix bugs
+  
 }
