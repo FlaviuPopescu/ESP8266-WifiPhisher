@@ -21,12 +21,10 @@ Attack::Attack() {
 void Attack::start() {
   stop();
   digitalWrite(D4, LOW);
-  prntln(A_START);
   attackTime = currentTime;
   attackStartTime = currentTime;
   accesspoints.sortAfterChannel();
   stations.sortAfterChannel();
-
   running = true;
 }
 
@@ -45,7 +43,6 @@ void Attack::start(bool beacon, bool deauth, bool deauthAll, bool probe,
   if (beacon || probe || deauthAll || deauth) {
     start();
   } else {
-    prntln(A_NO_MODE_ERROR);
     accesspoints.sort();
     stations.sort();
     stop();
@@ -69,7 +66,6 @@ void Attack::stop() {
     deauth.tc = 0;
     beacon.tc = 0;
     probe.tc = 0;
-    prntln(A_STOP);
   }
 }
 
@@ -477,12 +473,11 @@ bool Attack::sendPacket(uint8_t *packet, uint16_t packetSize, uint8_t ch,
 
 void Attack::enableOutput() {
   output = true;
-  prntln(A_ENABLED_OUTPUT);
 }
 
 void Attack::disableOutput() {
   output = false;
-  prntln(A_DISABLED_OUTPUT);
+
 }
 
 uint32_t Attack::getDeauthPkts() { return deauthPkts; }
