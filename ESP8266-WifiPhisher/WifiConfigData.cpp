@@ -64,8 +64,6 @@ void WifiConfigData::select(int num) {
   }
 
   internal_select(num);
-
-  prnt(AP_SELECTED);
   prntln(getSSID(num));
 }
 
@@ -74,16 +72,12 @@ void WifiConfigData::deselect(int num) {
     return;
 
   internal_deselect(num);
-
-  prnt(AP_DESELECTED);
   prntln(getSSID(num));
 }
 
 bool WifiConfigData::check(int num) {
   if (internal_check(num))
     return true;
-
-  prnt(AP_NO_AP_ERROR);
   prntln((String)num);
   return false;
 }
@@ -160,7 +154,6 @@ void WifiConfigData::save(String ssid, String pass) {
   String data;
   root.printTo(data);
   if (!writeFile(FILE_PATH, data)) {
-    prnt(F_ERROR_SAVING);
     prntln(FILE_PATH);
   }
   buf = String();
@@ -169,7 +162,6 @@ void WifiConfigData::save(String ssid, String pass) {
 void WifiConfigData::deleteAll() {
   String data = "{\"wifi\":[]}";
   if (!writeFile(FILE_PATH, data)) {
-    prnt(F_ERROR_SAVING);
     prntln(FILE_PATH);
   }
   toSerial();
