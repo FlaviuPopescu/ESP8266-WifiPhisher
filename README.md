@@ -20,8 +20,6 @@ This software allows you to easily perform a variety of actions to test 802.11 w
 ## Pinout
 <p><img alt="PICTURE logo" src="https://hackster.imgix.net/uploads/attachments/1212694/244v234_pe3ov4zwv9_xBZN30K1NU.jpg?auto=compress%2Cformat&w=740&h=555&fit=max" width="200"></p>
 
-## [Flashing the firmware bin file](https://www.hackster.io/234v244/esp8266-wifiphisher-4ed3d3)
-
 ## Compiling using Arduino IDE
 First you have to install and open the Arduino IDE.
 - Add the required [libraries](https://drive.google.com/drive/folders/1QKlt-UVW6BszD1YrvQ47xcYCMHJUfeuS?usp=sharing)
