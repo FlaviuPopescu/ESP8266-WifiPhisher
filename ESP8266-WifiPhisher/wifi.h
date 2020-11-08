@@ -173,6 +173,8 @@ bool handleFileRead(String path) {
   server.streamFile(file, contentType);
 
   file.close();
+  // prnt(SPACE);
+  // prntln(W_OK);
 
   return true;
 }
