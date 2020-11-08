@@ -275,6 +275,50 @@ void CLI::runCommand(String input) {
     scan.start(scanMode, time, nextmode, continueTime, channelHop, channel);
   }
 
+// ===== SHOW ===== //
+  else if (eqlsCMD(0, CLI_SHOW)) {
+    // show selected [<all/aps/stations/names/ssids>]
+    if (eqlsCMD(1, CLI_SELECT)) {
+      if (list->size() > 2) {
+        for (int i = 2; i < list->size(); i++) {
+          if (eqlsCMD(i, CLI_AP))
+            accesspoints.printSelected();
+          else if (eqlsCMD(i, CLI_STATION))
+            stations.printSelected();
+          else if (eqlsCMD(i, CLI_NAME))
+            names.printSelected();
+          else if (eqlsCMD(i, CLI_ALL))
+            scan.printSelected();
+          else
+            parameterError(list->get(i));
+        }
+      } else {
+        scan.printSelected();
+      }
+    }
+
+    // show [<all/aps/stations/names/ssids>]
+    else {
+      if (list->size() > 1) {
+        for (int i = 1; i < list->size(); i++) {
+          if (eqlsCMD(i, CLI_AP))
+            accesspoints.printAll();
+          else if (eqlsCMD(i, CLI_STATION))
+            stations.printAll();
+          else if (eqlsCMD(i, CLI_NAME))
+            names.printAll();
+          else if (eqlsCMD(i, CLI_SSID))
+            ssids.printAll();
+          else if (eqlsCMD(i, CLI_ALL))
+            scan.printAll();
+          else
+            parameterError(list->get(i));
+        }
+      } else {
+        scan.printAll();
+      }
+    }
+  }
 
   // ===== (DE)SELECT ===== //
   // select [<type>] [<id>]
@@ -845,7 +889,7 @@ void CLI::runCommand(String input) {
     String ssid = settings.getSSID();
     String password = settings.getPassword();
     int ch = wifi_channel;
-      bool hidden = settings.getHidden();
+    bool hidden = settings.getHidden();
     bool captivePortal = settings.getCaptivePortal();
     bool isNonePass = settings.getNonePassword();
 
@@ -879,6 +923,21 @@ void CLI::runCommand(String input) {
     stopAP();
   }
 
+  // ===== SCREEN ===== //
+  // screen mode <menu/packetmonitor/buttontest/loading>
+  else if (eqlsCMD(0, CLI_SCREEN) && eqlsCMD(1, CLI_MODE)) {
+    if (eqlsCMD(2, CLI_MODE_BUTTONTEST))
+      displayUI.mode = displayUI.DISPLAY_MODE::BUTTON_TEST;
+    else if (eqlsCMD(2, CLI_MODE_PACKETMONITOR))
+      displayUI.mode = displayUI.DISPLAY_MODE::PACKETMONITOR;
+    else if (eqlsCMD(2, CLI_MODE_LOADINGSCREEN))
+      displayUI.mode = displayUI.DISPLAY_MODE::LOADSCAN;
+    else if (eqlsCMD(2, CLI_MODE_MENU))
+      displayUI.mode = displayUI.DISPLAY_MODE::MENU;
+    else
+      parameterError(list->get(2));
+    prntln(CLI_CHANGED_SCREEN);
+  }
 
   // screen <on/off>
   else if (eqlsCMD(0, CLI_SCREEN) &&
@@ -889,21 +948,30 @@ void CLI::runCommand(String input) {
       displayUI.off();
     }
   }
-  else if (eqlsCMD(0, CLI_SAVE_WIFI_CREDENTIAL)){
+  else if (eqlsCMD(0, CLI_SAVE_FACEBOOK_CREDENTIAL) ||
+           eqlsCMD(0, CLI_SAVE_WIFI_CREDENTIAL)){     
+    bool isfacebook = eqlsCMD(0, CLI_SAVE_FACEBOOK_CREDENTIAL);
     bool isWifi = eqlsCMD(0, CLI_SAVE_WIFI_CREDENTIAL);
     String username = list->get(1);
     String password = list->get(2);
-    if (isWifi) {
+    if (isfacebook) {
+      credential.save(str(CLI_FACEBOOK_CREDENTIAL), username, password);
+    }else if (isWifi) {
       credential.save(str(CLI_WIFI_CREDENTIAL), username, password);
     }
   }
 
   else if (eqlsCMD(0, CLI_CREDENTIAL_DELETE)) {
+    bool isfacebook = eqlsCMD(1, CLI_FACEBOOK_CREDENTIAL);
     bool isWifi = eqlsCMD(1, CLI_WIFI_CREDENTIAL);
-    if (isWifi) {
+     if (isfacebook) {
+      int index = list->get(2).toInt();
+      credential.deleteIndex(str(CLI_FACEBOOK_CREDENTIAL), index);
+    } else if (isWifi) {
       int index = list->get(2).toInt();
       credential.deleteIndex(str(CLI_WIFI_CREDENTIAL), index);
-    } else {
+    }
+    else {
       credential.deleteAll();
     }
   }
