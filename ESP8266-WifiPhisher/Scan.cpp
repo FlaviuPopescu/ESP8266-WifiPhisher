@@ -1,332 +1,64 @@
-#include "Scan.h"
+#include "SSIDs.h"
 
-Scan::Scan() {
-    list = new SimpleList<uint16_t>;
+SSIDs::SSIDs() {
+    list = new SimpleList<SSID>;
 }
 
-void Scan::sniffer(uint8_t* buf, uint16_t len) {
-    if (!isSniffing()) return;
+void SSIDs::load() {
+    internal_removeAll();
+    DynamicJsonBuffer jsonBuffer(4000);
+    JsonObject& obj = parseJSONFile(FILE_PATH, jsonBuffer);
+    JsonArray & arr = obj.get<JsonArray>(str(SS_JSON_SSIDS));
 
-    packets++;
-
-    if (len < 28) return;  // drop frames that are too short to have a valid MAC header
-
-    if ((buf[12] == 0xc0) || (buf[12] == 0xa0)) {
-        tmpDeauths++;
-        return;
+    for (uint32_t i = 0; i < arr.size() && i < SSID_LIST_SIZE; i++) {
+        JsonArray& tmpArray = arr.get<JsonVariant>(i);
+        internal_add(tmpArray.get<String>(0), tmpArray.get<bool>(1), tmpArray.get<int>(2));
     }
-
-    // drop beacon frames, probe requests/responses and deauth/disassociation frames
-    if ((buf[12] == 0x80) || (buf[12] == 0x40) || (buf[12] == 0x50) /* || buf[12] == 0xc0 || buf[12] == 0xa0*/) return;
-
-    // only allow data frames
-    // if(buf[12] != 0x08 && buf[12] != 0x88) return;
-
-    uint8_t* macTo   = &buf[16];
-    uint8_t* macFrom = &buf[22];
-
-    if (macBroadcast(macTo) || macBroadcast(macFrom) || !macValid(macTo) || !macValid(macFrom) || macMulticast(macTo) ||
-        macMulticast(macFrom)) return;
-
-    int accesspointNum = findAccesspoint(macFrom);
-
-    if (accesspointNum >= 0) {
-        stations.add(macTo, accesspoints.getID(accesspointNum));
-    } else {
-        accesspointNum = findAccesspoint(macTo);
-
-        if (accesspointNum >= 0) {
-            stations.add(macFrom, accesspoints.getID(accesspointNum));
-        }
-    }
+    prntln(FILE_PATH);
 }
 
-int Scan::findAccesspoint(uint8_t* mac) {
-    for (int i = 0; i < accesspoints.count(); i++) {
-        if (memcmp(accesspoints.getMac(i), mac, 6) == 0) return i;
-    }
-    return -1;
-}
-
-void Scan::start(uint8_t mode) {
-    start(mode, sniffTime, scan_continue_mode, continueTime, channelHop, wifi_channel);
-}
-
-void Scan::start(uint8_t mode, uint32_t time, uint8_t nextmode, uint32_t continueTime, bool channelHop,
-                 uint8_t channel) {
-    if (mode != SCAN_MODE_OFF) stop();
-    digitalWrite(D4, LOW);
-    setWifiChannel(channel);
-    Scan::continueStartTime  = currentTime;
-    Scan::snifferPacketTime  = continueStartTime;
-    Scan::snifferOutputTime  = continueStartTime;
-    Scan::continueTime       = continueTime;
-    Scan::sniffTime          = time;
-    Scan::channelHop         = channelHop;
-    Scan::scanMode           = mode;
-    Scan::scan_continue_mode = nextmode;
-
-    if ((sniffTime > 0) && (sniffTime < 1000)) sniffTime = 1000;
-
-    // Serial.printf("mode: %u, time: %u, continue-mode: %u, continueTime: %u, channelHop: %u, channel: %u\r\n", mode,
-    // time, scan_continue_mode, continueTime, channelHop, channel);
-
-    /* AP Scan */
-    if ((mode == SCAN_MODE_APS) || (mode == SCAN_MODE_ALL)) {
-        // remove old results
-        accesspoints.removeAll();
-        stations.removeAll();
-        // start AP scan
-        prntln(SC_START_AP);
-        WiFi.scanNetworks(true, true);
-    }
-
-    /* Station Scan */
-    else if (mode == SCAN_MODE_STATIONS) {
-        // start station scan
-        if (accesspoints.count() < 1) {
-            start(SCAN_MODE_ALL);
-            // Serial.println(str(SC_ERROR_NO_AP));
-            return;
-        }
-        snifferStartTime = currentTime;
-        prnt(SC_START_CLIENT);
-
-        if (sniffTime > 0) prnt(String(sniffTime / 1000) + S);
-        else prnt(SC_INFINITELY);
-
-        if (!channelHop) {
-            prnt(SC_ON_CHANNEL);
-            prnt(wifi_channel);
-        }
-        prntln();
-
-        // enable sniffer
-        stopAP();
-        wifi_promiscuous_enable(true);
-    }
-
-    else if (mode == SCAN_MODE_SNIFFER) {
-        deauths          = tmpDeauths;
-        tmpDeauths       = 0;
-        snifferStartTime = currentTime;
-        prnt(SS_START_SNIFFER);
-
-        if (sniffTime > 0) prnt(String(sniffTime / 1000) + S);
-        else prnt(SC_INFINITELY);
-        prnt(SC_ON_CHANNEL);
-        prntln(channelHop ? str(SC_ONE_TO) + (String)14 : (String)wifi_channel);
-
-        // enable sniffer
-        stopAP();
-        wifi_promiscuous_enable(true);
-    }
-
-    /* Stop scan */
-    else if (mode == SCAN_MODE_OFF) {
-        wifi_promiscuous_enable(false);
-        digitalWrite(D4, HIGH);
-        if (settings.getWebInterface()) resumeAP();
-        prntln(SC_STOPPED);
-        save(true);
-
-        if (scan_continue_mode != SCAN_MODE_OFF) {
-            prnt(SC_RESTART);
-            prnt(int(continueTime / 1000));
-            prntln(SC_CONTINUE);
-        }
-    }
-
-    /* ERROR */
-    else {
-        prnt(SC_ERROR_MODE);
-        prntln(mode);
-        return;
-    }
-}
-
-void Scan::update() {
-    if (scanMode == SCAN_MODE_OFF) {
-        // restart scan if it is continuous
-        if (scan_continue_mode != SCAN_MODE_OFF) {
-            if (currentTime - continueStartTime > continueTime) start(scan_continue_mode);
-        }
-        return;
-    }
-
-    // sniffer
-    if (isSniffing()) {
-        // update packet list every 1s
-        if (currentTime - snifferPacketTime > 1000) {
-            snifferPacketTime = currentTime;
-            list->add(packets);
-
-            if (list->size() > SCAN_PACKET_LIST_SIZE) list->remove(0);
-            deauths    = tmpDeauths;
-            tmpDeauths = 0;
-            packets    = 0;
-        }
-
-        // print status every 3s
-        if (currentTime - snifferOutputTime > 3000) {
-            char s[100];
-
-            if (sniffTime > 0) {
-                sprintf(s, str(SC_OUTPUT_A).c_str(), getPercentage(), packets, stations.count(), deauths);
-            } else {
-                sprintf(s, str(SC_OUTPUT_B).c_str(), packets, stations.count(), deauths);
-            }
-            prnt(String(s));
-            snifferOutputTime = currentTime;
-        }
-
-        // channel hopping
-        if (channelHop && (currentTime - snifferChannelTime > settings.getChTime())) {
-            snifferChannelTime = currentTime;
-
-            if (scanMode == SCAN_MODE_STATIONS) nextChannel();  // go to next channel an AP is on
-            else setChannel(wifi_channel + 1);                  // go to next channel
-        }
-    }
-
-    // APs
-    if ((scanMode == SCAN_MODE_APS) || (scanMode == SCAN_MODE_ALL)) {
-        int16_t results = WiFi.scanComplete();
-
-        if (results >= 0) {
-            for (int16_t i = 0; i < results && i < 256; i++) {
-                if (channelHop || (WiFi.channel(i) == wifi_channel)) accesspoints.add(i, false);
-            }
-            accesspoints.sort();
-            accesspoints.printAll();
-
-            if (scanMode == SCAN_MODE_ALL) {
-                delay(30);
-                start(SCAN_MODE_STATIONS);
-            }
-            else start(SCAN_MODE_OFF);
-        }
-    }
-
-    // Stations
-    else if ((sniffTime > 0) && (currentTime > snifferStartTime + sniffTime)) {
-        wifi_promiscuous_enable(false);
-
-        if (scanMode == SCAN_MODE_STATIONS) {
-            stations.sort();
-            stations.printAll();
-        }
-        start(SCAN_MODE_OFF);
-    }
-}
-
-void Scan::setup() {
-    save(true);
-}
-
-void Scan::stop() {
-    scan_continue_mode = SCAN_MODE_OFF;
-    start(SCAN_MODE_OFF);
-}
-
-void Scan::setChannel(uint8_t ch) {
-    if (ch > 14) ch = 1;
-    else if (ch < 1) ch = 14;
-
-    wifi_promiscuous_enable(0);
-    setWifiChannel(ch);
-    wifi_promiscuous_enable(1);
-}
-
-void Scan::nextChannel() {
-    if (accesspoints.count() > 1) {
-        uint8_t ch = wifi_channel;
-
-        do {
-            ch++;
-
-            if (ch > 14) ch = 1;
-        } while (!apWithChannel(ch));
-        setChannel(ch);
-    }
-}
-
-bool Scan::apWithChannel(uint8_t ch) {
-    for (int i = 0; i < accesspoints.count(); i++)
-        if (accesspoints.getCh(i) == ch) return true;
-
-    return false;
-}
-
-void Scan::save(bool force, String filePath) {
+void SSIDs::load(String filepath) {
     String tmp = FILE_PATH;
 
-    FILE_PATH = filePath;
-    save(true);
+    FILE_PATH = filepath;
+    load();
     FILE_PATH = tmp;
 }
 
-void Scan::save(bool force) {
-    if (!(accesspoints.changed || stations.changed) && !force) return;
+void SSIDs::removeAll() {
+    internal_removeAll();
+    changed = true;
+}
 
-    // Accesspoints
-    String buf = String(OPEN_CURLY_BRACKET) + String(DOUBLEQUOTES) + str(SC_JSON_APS) + String(DOUBLEQUOTES) + String(
-        DOUBLEPOINT) + String(OPEN_BRACKET); // {"aps":[
+void SSIDs::save(bool force) {
+    if (!force && !changed) return;
 
-    if (!writeFile(FILE_PATH, buf)) {        // overwrite old file
-        prnt(F_ERROR_SAVING);
+    String buf = String();                              // create buffer
+    buf += String(OPEN_CURLY_BRACKET) + String(DOUBLEQUOTES) + str(SS_JSON_RANDOM) + String(DOUBLEQUOTES) + String(
+        DOUBLEPOINT) + b2s(randomMode) + String(COMMA); // {"random":false,
+    buf += String(DOUBLEQUOTES) + str(SS_JSON_SSIDS) + String(DOUBLEQUOTES) + String(DOUBLEPOINT) +
+           String(OPEN_BRACKET);                        // "ssids":[
+
+    if (!writeFile(FILE_PATH, buf)) {
         prntln(FILE_PATH);
         return;
     }
-
     buf = String(); // clear buffer
-    uint32_t apCount = accesspoints.count();
 
-    for (uint32_t i = 0; i < apCount; i++) {
-        buf += String(OPEN_BRACKET) + String(DOUBLEQUOTES) + escape(accesspoints.getSSID(i)) + String(DOUBLEQUOTES) +
-               String(COMMA);                                                                                    // ["ssid",
-        buf += String(DOUBLEQUOTES) + escape(accesspoints.getNameStr(i)) + String(DOUBLEQUOTES) + String(COMMA); // "name",
-        buf += String(accesspoints.getCh(i)) + String(COMMA);                                                    // 1,
-        buf += String(accesspoints.getRSSI(i)) + String(COMMA);                                                  // -30,
-        buf += String(DOUBLEQUOTES) + accesspoints.getEncStr(i) + String(DOUBLEQUOTES) + String(COMMA);          // "wpa2",
-        buf += String(DOUBLEQUOTES) + accesspoints.getMacStr(i) + String(DOUBLEQUOTES) + String(COMMA);          // "00:11:22:00:11:22",
-        buf += String(DOUBLEQUOTES) + accesspoints.getVendorStr(i) + String(DOUBLEQUOTES) + String(COMMA);       // "vendor",
-        buf += b2s(accesspoints.getSelected(i)) + String(CLOSE_BRACKET);                                         // false]
+    String name;
+    int    c = count();
 
-        if (i < apCount - 1) buf += String(COMMA);                                                               // ,
+    for (int i = 0; i < c; i++) {
+        name = escape(getName(i));
+
+        buf += String(OPEN_BRACKET) + String(DOUBLEQUOTES) + name + String(DOUBLEQUOTES) + String(COMMA); // ["name",
+        buf += b2s(getWPA2(i)) + String(COMMA);                                                           // false,
+        buf += String(getLen(i)) + String(CLOSE_BRACKET);                                                 // 12]
+
+        if (i < c - 1) buf += COMMA;                                                                      // ,
 
         if (buf.length() >= 1024) {
             if (!appendFile(FILE_PATH, buf)) {
-                prnt(F_ERROR_SAVING);
-                prntln(FILE_PATH);
-                return;
-            }
-
-            buf = String(); // clear buffer
-        }
-    }
-
-    // Stations
-    buf += String(CLOSE_BRACKET) + String(COMMA) + String(DOUBLEQUOTES) + str(SC_JSON_STATIONS) + String(DOUBLEQUOTES) +
-           String(DOUBLEPOINT) + String(OPEN_BRACKET); // ],"stations":[;
-    uint32_t stationCount = stations.count();
-
-    for (uint32_t i = 0; i < stationCount; i++) {
-        buf += String(OPEN_BRACKET) + String(DOUBLEQUOTES) + stations.getMacStr(i) + String(DOUBLEQUOTES) +
-               String(COMMA);                                                                          // ["00:11:22:00:11:22",
-        buf += String(stations.getCh(i)) + String(COMMA);                                              // 1,
-        buf += String(DOUBLEQUOTES) + stations.getNameStr(i) + String(DOUBLEQUOTES) + String(COMMA);   // "name",
-        buf += String(DOUBLEQUOTES) + stations.getVendorStr(i) + String(DOUBLEQUOTES) + String(COMMA); // "vendor",
-        buf += String(*stations.getPkts(i)) + String(COMMA);                                           // 123,
-        buf += String(stations.getAP(i)) + String(COMMA);                                              // 0,
-        buf += String(DOUBLEQUOTES) + stations.getTimeStr(i) + String(DOUBLEQUOTES) + String(COMMA);   // "<1min",
-        buf += b2s(stations.getSelected(i)) + String(CLOSE_BRACKET);                                   // false]
-
-        if (i < stationCount - 1) buf += String(COMMA);                                                // ,
-
-        if (buf.length() >= 1024) {
-            if (!appendFile(FILE_PATH, buf)) {
-                prnt(F_ERROR_SAVING);
                 prntln(FILE_PATH);
                 return;
             }
@@ -338,111 +70,217 @@ void Scan::save(bool force) {
     buf += String(CLOSE_BRACKET) + String(CLOSE_CURLY_BRACKET); // ]}
 
     if (!appendFile(FILE_PATH, buf)) {
-        prnt(F_ERROR_SAVING);
         prntln(FILE_PATH);
         return;
     }
-
-    accesspoints.changed = false;
-    stations.changed     = false;
-    prnt(SC_SAVED_IN);
     prntln(FILE_PATH);
+    changed = false;
 }
 
-uint32_t Scan::countSelected() {
-    return accesspoints.selected() + stations.selected() + names.selected();
+void SSIDs::save(bool force, String filepath) {
+    String tmp = FILE_PATH;
+
+    FILE_PATH = filepath;
+    save(force);
+    FILE_PATH = tmp;
 }
 
-uint32_t Scan::countAll() {
-    return accesspoints.count() + stations.count() + names.count();
-}
+void SSIDs::update() {
+    if (randomMode) {
+        if (currentTime - randomTime > randomInterval * 1000) {
+            prntln(SS_RANDOM_INFO);
 
-bool Scan::isScanning() {
-    return scanMode != SCAN_MODE_OFF;
-}
+            for (int i = 0; i < SSID_LIST_SIZE; i++) {
+                SSID newSSID;
 
-bool Scan::isSniffing() {
-    return scanMode == SCAN_MODE_STATIONS || scanMode == SCAN_MODE_SNIFFER;
-}
+                if (check(i)) newSSID = list->get(i);
 
-uint8_t Scan::getPercentage() {
-    if (!isSniffing()) return 0;
+                newSSID.name = String();
+                newSSID.len  = 32;
 
-    return (currentTime - snifferStartTime) / (sniffTime / 100);
-}
+                for (int i = 0; i < 32; i++) newSSID.name += char(random(32, 127));
 
-void Scan::selectAll() {
-    accesspoints.selectAll();
-    stations.selectAll();
-    names.selectAll();
-}
+                newSSID.wpa2 = random(0, 2);
 
-void Scan::deselectAll() {
-    accesspoints.deselectAll();
-    stations.deselectAll();
-    names.deselectAll();
-}
+                if (check(i)) list->replace(i, newSSID);
+                else list->add(newSSID);
+            }
 
-void Scan::printAll() {
-    accesspoints.printAll();
-    stations.printAll();
-    names.printAll();
-    ssids.printAll();
-}
-
-void Scan::printSelected() {
-    accesspoints.printSelected();
-    stations.printSelected();
-    names.printSelected();
-}
-
-uint32_t Scan::getPackets(int i) {
-    if (list->size() < SCAN_PACKET_LIST_SIZE) {
-        uint8_t translatedNum = SCAN_PACKET_LIST_SIZE - list->size();
-
-        if (i >= translatedNum) return list->get(i - translatedNum);
-
-        return 0;
-    } else {
-        return list->get(i);
+            randomTime = currentTime;
+            changed    = true;
+        }
     }
 }
 
-String Scan::getMode() {
-    switch (scanMode) {
-    case SCAN_MODE_OFF:
-        return str(SC_MODE_OFF);
+String SSIDs::getName(int num) {
+    return check(num) ? list->get(num).name : String();
+}
 
-    case SCAN_MODE_APS:
-        return str(SC_MODE_AP);
+bool SSIDs::getWPA2(int num) {
+    return check(num) ? list->get(num).wpa2 : false;
+}
 
-    case SCAN_MODE_STATIONS:
-        return str(SC_MODE_ST);
+int SSIDs::getLen(int num) {
+    return check(num) ? list->get(num).len : 0;
+}
 
-    case SCAN_MODE_ALL:
-        return str(SC_MODE_ALL);
+void SSIDs::setWPA2(int num, bool wpa2) {
+    SSID newSSID = list->get(num);
 
-    case SCAN_MODE_SNIFFER:
-        return str(SC_MODE_SNIFFER);
+    newSSID.wpa2 = wpa2;
+    list->replace(num, newSSID);
+}
 
-    default:
-        return String();
+String SSIDs::getEncStr(int num) {
+    if (getWPA2(num)) return F("WPA2");
+    else return "-";
+}
+
+void SSIDs::remove(int num) {
+    if (!check(num)) return;
+    internal_remove(num);
+    prntln(getName(num));
+    changed = true;
+}
+
+String SSIDs::randomize(String name) {
+    int ssidlen = name.length();
+    if (ssidlen > 32) name = name.substring(0, 32);
+    if (ssidlen < 32) {
+        for (int i = ssidlen; i < 32; i++) {
+            int rnd = random(3);
+            if ((i < 29) && (rnd == 0)) { // ZERO WIDTH SPACE
+                name += char(0xE2);
+                name += char(0x80);
+                name += char(0x8B);
+                i    += 2;
+            } else if ((i < 30) && (rnd == 1)) { // NO-BREAK SPACE
+                name += char(0xC2);
+                name += char(0xA0);
+                i    += 1;
+            } else {
+                name += char(0x20); // SPACE
+            }
+        }
+    }
+    return name;
+}
+
+void SSIDs::add(String name, bool wpa2, int clones, bool force) {
+    if (list->size() >= SSID_LIST_SIZE) {
+        if (force) {
+            internal_remove(0);
+        } else {
+            return;
+        }
+    }
+
+    if (clones > SSID_LIST_SIZE) clones = SSID_LIST_SIZE;
+
+    for (int i = 0; i < clones; i++) {
+        internal_add(clones > 1 ? randomize(name) : name, wpa2, name.length());
+
+        if (list->size() > SSID_LIST_SIZE) internal_remove(0);
+    }
+    prntln(name);
+    changed = true;
+}
+
+void SSIDs::cloneSelected(bool force) {
+    if (accesspoints.selected() > 0) {
+        int clones = SSID_LIST_SIZE;
+
+        if (!force) clones -= list->size();
+        clones /= accesspoints.selected();
+
+        int apCount = accesspoints.count();
+
+        for (int i = 0; i < apCount; i++) {
+            if (accesspoints.getSelected(i)) add(accesspoints.getSSID(i), accesspoints.getEnc(i) != 0, clones, force);
+        }
     }
 }
 
-double Scan::getScaleFactor(uint8_t height) {
-    return (double)height / (double)getMaxPacket();
+bool SSIDs::getRandom() {
+    return randomMode;
 }
 
-uint32_t Scan::getMaxPacket() {
-    uint16_t max = 0;
+void SSIDs::replace(int num, String name, bool wpa2) {
+    if (!check(num)) return;
 
-    for (uint8_t i = 0; i < list->size(); i++) {
-        if (list->get(i) > max) max = list->get(i);
+    int len = name.length();
+
+    if (len > 32) len = 32;
+    SSID newSSID;
+    newSSID.name = randomize(name);
+    newSSID.wpa2 = wpa2;
+    newSSID.len  = (uint8_t)len;
+    list->replace(num, newSSID);
+    prntln(name);
+    changed = true;
+}
+
+void SSIDs::print(int num) {
+    print(num, true, false);
+}
+
+void SSIDs::print(int num, bool header, bool footer) {
+    if (!check(num)) return;
+
+    if (header) {
     }
-    return max;
+
+    prnt(leftRight(String(), (String)num, 2));
+    prnt(leftRight(String(SPACE), getEncStr(num), 5));
+    prntln(leftRight(String(SPACE) + getName(num), String(), 33));
+
 }
 
-uint32_t Scan::getPacketRate() {
-    return list->get(list->size() - 1);
+void SSIDs::printAll() {
+    int c = count();
+
+    if (c != 0) for (int i = 0; i < c; i++) print(i, i == 0, i == c - 1);
+}
+
+int SSIDs::count() {
+    return list->size();
+}
+
+bool SSIDs::check(int num) {
+    return num >= 0 && num < count();
+}
+
+void SSIDs::enableRandom(uint32_t randomInterval) {
+    randomMode            = true;
+    SSIDs::randomInterval = randomInterval;
+    update();
+}
+
+void SSIDs::disableRandom() {
+    randomMode = false;
+    internal_removeAll();
+}
+
+void SSIDs::internal_add(String name, bool wpa2, int len) {
+    if (len > 32) {
+        name = name.substring(0, 32);
+        len  = 32;
+    }
+
+    name = fixUtf8(name);
+
+    SSID newSSID;
+    newSSID.name = name;
+    newSSID.wpa2 = wpa2;
+    newSSID.len  = (uint8_t)len;
+
+    list->add(newSSID);
+}
+
+void SSIDs::internal_remove(int num) {
+    list->remove(num);
+}
+
+void SSIDs::internal_removeAll() {
+    list->clear();
 }
