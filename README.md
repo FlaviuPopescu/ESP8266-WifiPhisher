@@ -23,32 +23,30 @@ Wifiphisher can be further used to mount victim-customized web phishing attacks 
 ## Installation
 
 You have 2 choices here. Uploading the .bin files is easier.  
-**YOU ONLY NEED TO DO ONE OF THE INSTALLATION METHODS!**
+***YOU ONLY NEED TO DO ONE OF THE INSTALLATION METHODS!***
 
-### Uploading the bin files  
+#### 1.Uploading the bin files  
 
-**0** Download the current release from [releases](https://github.com/244v234/ESP8266-WifiPhisher/releases)  
+* Download the current release from [releases](https://github.com/244v234/ESP8266-WifiPhisher/releases)  
 
-**1** Upload using the ESP8266 flash tool of your choice:  
+* Upload using the ESP8266 flash tool of your choice:  
 	- [nodemcu-flasher](https://github.com/nodemcu/nodemcu-flasher) [Windows only]  
 	- [esptool-gui](https://github.com/Rodmg/esptool-gui) [Windows, MacOS]  
 	- [esptool](https://github.com/espressif/esptool) [Windows, MacOS, Linux]  
-
-**That's all!**  
 
 Make sure your settings are correct for your board. Most boards come with 4mb flash and sometimes you have to hold the flash button down while plugging it in and hold it until the flashing process started.  
 Also make sure you select the right com-port, the right upload size (mostly 4mb) and the correct .bin file.  
 If it's not working, you can try using the Arduino as descriped below.
 
-### Compiling the source with Arduino
+#### 2.Compiling the source with Arduino
 First you have to install and open the Arduino IDE.
-- Add the required [libraries](https://drive.google.com/drive/folders/1QKlt-UVW6BszD1YrvQ47xcYCMHJUfeuS?usp=sharing)
-- In Arduino go to File -> Preferences add both URLs in Additional Boards Manager URLs https://raw.githubusercontent.com/SpacehuhnTech/arduino/main/package_spacehuhn_index.json
-- Go to Tools -> Board -> Boards Manager, search "deauther" and install Deauther ESP8266 Boards
-- Select your board at Tools -> Board and be sure it is at Deauther ESP8266 Boards (and not at ESP8266 Modules)!
-- Download the source code for this project from the releases page. You can also clone the project to get the latest changes, but you will also get the latest bugs ;)
-- Extract the whole .zip file, and open ESP8266-WifiPhisher.ino with Arduino.
-- Check your upload settings and press upload!
+* Add the required [libraries](https://drive.google.com/drive/folders/1QKlt-UVW6BszD1YrvQ47xcYCMHJUfeuS?usp=sharing)
+* In Arduino go to File -> Preferences add both URLs in Additional Boards Manager URLs https://raw.githubusercontent.com/SpacehuhnTech/arduino/main/package_spacehuhn_index.json
+* Go to Tools -> Board -> Boards Manager, search "deauther" and install Deauther ESP8266 Boards
+* Select your board at Tools -> Board and be sure it is at Deauther ESP8266 Boards (and not at ESP8266 Modules)!
+* Download the source code for this project from the releases page. You can also clone the project to get the latest changes, but you will also get the latest bugs ;)
+* Extract the whole .zip file, and open ESP8266-WifiPhisher.ino with Arduino.
+* Check your upload settings and press upload!
 
 ## :octocat: Contribute
 All contributions are welcome! Code, documentation, graphics, or even design suggestions are welcome; use GitHub to its fullest. Submit pull requests, contribute tutorials -- whatever you have to offer, it'll be appreciated
