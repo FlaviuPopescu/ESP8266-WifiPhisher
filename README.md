@@ -7,7 +7,7 @@
 <br></p>
 
 ## ESP8266 WifiPhisher
-This software allows you to easily perform a variety of actions to test 802.11 wireless networks by using an inexpensive ESP8266 WiFi SoC (System On A Chip).
+Wifiphisher can be further used to mount victim-customized web phishing attacks against the connected clients in order to capture credentials (e.g. from third party login pages or WPA/WPA2 Pre-Shared Keys) by using an inexpensive ESP8266 WiFi SoC (System On A Chip).
 
 ## Main feature
 * The deauthentication attack, is used to disconnect devices from their WiFi network.	
