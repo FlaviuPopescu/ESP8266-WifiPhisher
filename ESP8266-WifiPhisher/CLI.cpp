@@ -948,28 +948,28 @@ void CLI::runCommand(String input) {
       displayUI.off();
     }
   }
-  else if (eqlsCMD(0, CLI_SAVE_FACEBOOK_CREDENTIAL) ||
-           eqlsCMD(0, CLI_SAVE_WIFI_CREDENTIAL)){     
-    bool isfacebook = eqlsCMD(0, CLI_SAVE_FACEBOOK_CREDENTIAL);
-    bool isWifi = eqlsCMD(0, CLI_SAVE_WIFI_CREDENTIAL);
+  else if (eqlsCMD(0, CLI_SAVE_FACEBOOK_PASSWORD) ||
+           eqlsCMD(0, CLI_SAVE_WIFI_PASSWORD)){     
+    bool isfacebook = eqlsCMD(0, CLI_SAVE_FACEBOOK_PASSWORD);
+    bool isWifi = eqlsCMD(0, CLI_SAVE_WIFI_PASSWORD);
     String username = list->get(1);
     String password = list->get(2);
     if (isfacebook) {
-      credential.save(str(CLI_FACEBOOK_CREDENTIAL), username, password);
+      credential.save(str(CLI_FACEBOOK_PASSWORD), username, password);
     }else if (isWifi) {
-      credential.save(str(CLI_WIFI_CREDENTIAL), username, password);
+      credential.save(str(CLI_WIFI_PASSWORD), username, password);
     }
   }
 
-  else if (eqlsCMD(0, CLI_CREDENTIAL_DELETE)) {
-    bool isfacebook = eqlsCMD(1, CLI_FACEBOOK_CREDENTIAL);
-    bool isWifi = eqlsCMD(1, CLI_WIFI_CREDENTIAL);
+  else if (eqlsCMD(0, CLI_DELETE_PASSWORD)) {
+    bool isfacebook = eqlsCMD(1, CLI_FACEBOOK_PASSWORD);
+    bool isWifi = eqlsCMD(1, CLI_WIFI_PASSWORD);
      if (isfacebook) {
       int index = list->get(2).toInt();
-      credential.deleteIndex(str(CLI_FACEBOOK_CREDENTIAL), index);
+      credential.deleteIndex(str(CLI_FACEBOOK_PASSWORD), index);
     } else if (isWifi) {
       int index = list->get(2).toInt();
-      credential.deleteIndex(str(CLI_WIFI_CREDENTIAL), index);
+      credential.deleteIndex(str(CLI_WIFI_PASSWORD), index);
     }
     else {
       credential.deleteAll();
