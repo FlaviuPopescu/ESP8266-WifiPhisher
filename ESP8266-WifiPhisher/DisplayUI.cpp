@@ -7,9 +7,6 @@
 void DisplayUI::configInit() {
   display.init();
   display.setFont(DejaVu_Sans_Mono_12);
-
-  // brightness = settings.getBrightness();
-  // int _brightness = map(brightness, 0, 100, 0, 255);
   display.setBrightness(255);
   display.setContrast(255);
 #ifndef FLIP_DIPLAY
@@ -124,7 +121,7 @@ void DisplayUI::setup() {
                      [this, i]() {
                        if (attack.isRunning()) {
                          if (alert.alertOptions(
-                                 str(D_TITLE_SET_CAPTIVE_STOP_WIFI_HACKING), "",
+                                 str(D_TITLE_SET_STOP_WIFI_HACKING), "",
                                  str(D_AGREE_BUTTON), str(D_CANCEL_BUTTON))) {
                            attack.stop();
                            WiFi.mode(WIFI_OFF);
@@ -140,7 +137,7 @@ void DisplayUI::setup() {
                            accesspoints.select(i);
                            String ssid = accesspoints.getSSID(i);
                            if (alert.alertOptions(
-                                   str(S_SSID), str(D_ADD_EXTENSION_NAME_SSID),
+                                   str(S_ASK), str(D_ADD_EXTENSION_NAME_SSID),
                                    str(D_AGREE_BUTTON), str(D_CANCEL_BUTTON))) {
                              ssid = keyboard.show(accesspoints.getSSID(i));
                            }
@@ -172,7 +169,7 @@ void DisplayUI::setup() {
                       [this, i]() {
                         if (attack.isRunning()) {
                        if (alert.alertOptions(
-                                 str(D_TITLE_SET_CAPTIVE_STOP_WIFI_HACKING), "",
+                                 str(D_TITLE_SET_STOP_WIFI_HACKING), "",
                                  str(D_AGREE_BUTTON), str(D_CANCEL_BUTTON))) {
                            attack.stop();
                            WiFi.mode(WIFI_OFF);
@@ -188,7 +185,7 @@ void DisplayUI::setup() {
                            accesspoints.select(i);
                            String ssid = accesspoints.getSSID(i);
                            if (alert.alertOptions(
-                                   str(S_SSID), str(D_ADD_EXTENSION_NAME_SSID),
+                                   str(S_ASK), str(D_ADD_EXTENSION_NAME_SSID),
                                    str(D_AGREE_BUTTON), str(D_CANCEL_BUTTON))) {
                              ssid = keyboard.show(accesspoints.getSSID(i));
                            }
@@ -217,7 +214,7 @@ void DisplayUI::setup() {
                               wifi_channel);
                    mode = DISPLAY_MODE::PACKETMONITOR;
                  });
-    addMenuNode(&mainMenu, time_on_screen_bits, D_TIME_ON_SCREEN, &timeOnScreenMenu);  // Setting
+    addMenuNode(&mainMenu, time_on_screen_bits, D_SETTING, &timeOnScreenMenu);  // Setting
     addMenuNode(&mainMenu, menu_info_bits, D_INFO, [this]() { // Info
       mode = DISPLAY_MODE::HOME;
       display.setFont(DejaVu_Sans_Mono_12);
@@ -282,7 +279,7 @@ void DisplayUI::setup() {
                            maxLen - 1);
         },
         [this]() {
-          if (alert.alertOptions(str(D_ATTACK1), str(D_SET_ATTACK_TIMEOUT1),
+          if (alert.alertOptions(str(D_ASK), str(D_SET_ATTACK_TIMEOUT1),
                                  str(D_AGREE_BUTTON), str(D_CANCEL_BUTTON))) {
             String timeout = keyboard.show();
 
@@ -310,7 +307,7 @@ addMenuNode(
                            maxLen - 1);
         },
         [this]() {
-          if (alert.alertOptions(str(D_ATTACK1), str(D_DEAUTHPACKET),   // 
+          if (alert.alertOptions(str(D_ASK), str(D_DEAUTHPACKET),   // 
                                  str(D_AGREE_BUTTON), str(D_CANCEL_BUTTON))) {
             String deauth = keyboard.show();
 
@@ -341,7 +338,7 @@ addMenuNode(
                            maxLen - 1);
         },
         [this]() {
-          if (alert.alertOptions(str(D_ATTACK1), str(S_DISPLAY_TIMEOUT1), 
+          if (alert.alertOptions(str(D_ASK), str(S_DISPLAY_TIMEOUT1), 
                                  str(D_AGREE_BUTTON), str(D_CANCEL_BUTTON))) {
             String DisplayTimeout = keyboard.show();
 
@@ -372,7 +369,7 @@ addMenuNode(
                            maxLen - 1);
         },
         [this]() {
-          if (alert.alertOptions(str(D_ATTACK1), str(D_FORCE1),   // 
+          if (alert.alertOptions(str(D_ASK), str(D_FORCE1),   // 
                                  str(D_AGREE_BUTTON), str(D_CANCEL_BUTTON))) {
             String force = keyboard.show();
 
@@ -383,7 +380,7 @@ addMenuNode(
                   alert.showSuccess(str(D_SUCCESS_ALERT));
                 }
                  else {
-                  alert.showFailure(str(D_MINMAC_FORCE));
+                  alert.showFailure(str(D_MINMAX_FORCE));
                 }
               } else {
                 alert.showFailure(str(D_INPUT_NUMBER_WRONG_FORMAT));
@@ -404,7 +401,7 @@ addMenuNode(
                            maxLen - 1);
         },
         [this]() {
-          if (alert.alertOptions(str(D_ATTACK1), str(D_MIN_DEAUTH1),   // 
+          if (alert.alertOptions(str(D_ASK), str(D_MIN_DEAUTH1),   // 
                                  str(D_AGREE_BUTTON), str(D_CANCEL_BUTTON))) {
             String mindeauth = keyboard.show();
 
@@ -436,7 +433,7 @@ addMenuNode(
                            maxLen - 1);
         },
         [this]() {
-          if (alert.alertOptions(str(D_ATTACK1), str(D_PROBEPERSSID1),   // 
+          if (alert.alertOptions(str(D_ASK), str(D_PROBEPERSSID1),   // 
                                  str(D_AGREE_BUTTON), str(D_CANCEL_BUTTON))) {
             String ProbesPerSSID = keyboard.show();
 
@@ -466,7 +463,7 @@ addMenuNode(
                            maxLen - 1);
         },
         [this]() {
-          if (alert.alertOptions(str(D_ATTACK1), str(D_DEAUTH_REASON),   // 
+          if (alert.alertOptions(str(D_ASK), str(D_DEAUTH_REASON),   // 
                                  str(D_AGREE_BUTTON), str(D_CANCEL_BUTTON))) {
             String DeauthReason = keyboard.show();
 
@@ -496,7 +493,7 @@ addMenuNode(
                            maxLen - 1);
         },
         [this]() {
-          if (alert.alertOptions(str(D_ATTACK1), str(D_CHANNEL1),   
+          if (alert.alertOptions(str(D_ASK), str(D_CHANNEL1),   
                                  str(D_AGREE_BUTTON), str(D_CANCEL_BUTTON))) {
             String channel1 = keyboard.show();
 
@@ -521,12 +518,12 @@ addMenuNode(
 addMenuNode(
         &timeOnScreenMenu,
         [this]() { // START
-          return leftRight(str(S_CHANNEL1), // CHANNEL_time
+          return leftRight(str(S_CHANNEL_TIME1), // CHANNEL_time
                            String(settings.getChTime()),
                            maxLen - 1);
         },
         [this]() {
-          if (alert.alertOptions(str(D_ATTACK1), str(S_CHANNEL2),   // 
+          if (alert.alertOptions(str(D_ASK), str(S_CHANNEL_TIME2),   // 
                                  str(D_AGREE_BUTTON), str(D_CANCEL_BUTTON))) {
             String ChTime = keyboard.show();
 
@@ -572,40 +569,24 @@ addMenuNode(
         
   });
 
-
-  createMenu(&captiveSelectMenu, &wifiCaptiveMenu, DISPLAY_LIST, [this]() {
-
-    addMenuNode(&captiveSelectMenu, D_TITLE_TURN_OFF_CAPTIVE, [this]() {
-      if (alert.alertOptions(str(D_TITLE_TURN_OFF_CAPTIVE),
-                             str(D_CAPTIVE_PORTAL_OFF_MESSAGE),
-                             str(D_AGREE_BUTTON), str(D_CANCEL_BUTTON))) {
-        WiFi.mode(WIFI_OFF);
-        settings.setCaptivePortal(false);
-        settings.save(true);
-        alert.showSuccess(str(D_SUCCESS_ALERT));
-      }
-      configInit();
-    });
-  });
-
 createMenu(&listFacebookCredential, &mainMenu, DISPLAY_LIST, [this]() {
     // add APs to list
-    int c = credential.count(str(CLI_FACEBOOK_CREDENTIAL));
+    int c = credential.count(str(CLI_FACEBOOK_PASSWORD));
     for (int i = 0; i < c; i++) {
       addMenuNode(
           &listFacebookCredential,
           [i]() {
             return "Acc: " +
-                   credential.getSocialUser(str(CLI_FACEBOOK_CREDENTIAL), i) +
+                   credential.getSocialUser(str(CLI_FACEBOOK_PASSWORD), i) +
                    " - pass: " +
-                   credential.getSocialPass(str(CLI_FACEBOOK_CREDENTIAL), i) +
+                   credential.getSocialPass(str(CLI_FACEBOOK_PASSWORD), i) +
                    " ";
           },
           [this, i]() {
             if (alert.alertOptions(str(CLI_DELETE1),
                                    str(D_DELETE_ACCOUNT),
                                    str(CLI_DELETE), str(D_CANCEL_BUTTON))) {
-              credential.deleteIndex(str(CLI_FACEBOOK_CREDENTIAL), i);
+              credential.deleteIndex(str(CLI_FACEBOOK_PASSWORD), i);
               alert.showSuccess(str(D_SUCCESS_ALERT));
             }
             configInit();
@@ -620,21 +601,21 @@ createMenu(&listFacebookCredential, &mainMenu, DISPLAY_LIST, [this]() {
   });
   createMenu(&listWifiCredential, &mainMenu, DISPLAY_LIST, [this]() {
     // add APs to list
-    int c = credential.count(str(CLI_WIFI_CREDENTIAL));
+    int c = credential.count(str(CLI_WIFI_PASSWORD));
     for (int i = 0; i < c; i++) {
       addMenuNode(
           &listWifiCredential,
           [i]() {
             return "ssid: " +
-                   credential.getSocialUser(str(CLI_WIFI_CREDENTIAL), i) +
+                   credential.getSocialUser(str(CLI_WIFI_PASSWORD), i) +
                    " - pass: " +
-                   credential.getSocialPass(str(CLI_WIFI_CREDENTIAL), i) + " ";
+                   credential.getSocialPass(str(CLI_WIFI_PASSWORD), i) + " ";
           },
           [this, i]() {
             if (alert.alertOptions(str(CLI_DELETE1),
-                                   str(D_TITLE_DELETE_CREDENTIAL),
+                                   str(D_TITLE_DELETE_PASSWORD),
                                    str(CLI_DELETE), str(D_CANCEL_BUTTON))) {
-              credential.deleteIndex(str(CLI_WIFI_CREDENTIAL), i);
+              credential.deleteIndex(str(CLI_WIFI_PASSWORD), i);
               alert.showSuccess(str(D_SUCCESS_ALERT));
             }
             configInit();
@@ -1521,10 +1502,10 @@ void DisplayUI::drawIntro() {
 
   display.setFont(DejaVu_Sans_Mono_10);
   drawString(0, center(F("ESP8266 WifiPhisher"), 20));
-  drawString(1, center(F("by@244v234"), 20));
-  drawString(2, center(F("github.com/244v234"), 20));
+  drawString(1, center(F("by 244v234"), 20));
+  drawString(2, center(F("Github.com/244v234"), 20));
   drawString(3, center(F("Hackster.io/244v234"), 20));
-  drawString(4, center(F("-----*****-----"), 20));
+  drawString(4, center(F("-------*****-------"), 20));
   delay(4000);
 }
 
