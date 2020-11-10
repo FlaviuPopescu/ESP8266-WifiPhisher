@@ -15,19 +15,19 @@ void Credential::init() {
   DynamicJsonBuffer jsonBuffer;
   JsonObject &root = jsonBuffer.parseObject(buf);
   // listFacebook
-  if (isExist(root, str(CLI_FACEBOOK_CREDENTIAL)) &&
-      isExist(root, str(CLI_WIFI_CREDENTIAL)))
+  if (isExist(root, str(CLI_FACEBOOK_PASSWORD)) &&
+      isExist(root, str(CLI_WIFI_PASSWORD)))
   {
-     if (isExist(root, str(CLI_FACEBOOK_CREDENTIAL))) {
-      JsonArray &values = root[str(CLI_FACEBOOK_CREDENTIAL)];
+     if (isExist(root, str(CLI_FACEBOOK_PASSWORD))) {
+      JsonArray &values = root[str(CLI_FACEBOOK_PASSWORD)];
       for (unsigned int i = 0; i < values.size(); i++) {
-        add(str(CLI_FACEBOOK_CREDENTIAL), values[i][0], values[i][1]);
+        add(str(CLI_FACEBOOK_PASSWORD), values[i][0], values[i][1]);
       }
      }
-    if (isExist(root, str(CLI_WIFI_CREDENTIAL))) {
-      JsonArray &values = root[str(CLI_WIFI_CREDENTIAL)];
+    if (isExist(root, str(CLI_WIFI_PASSWORD))) {
+      JsonArray &values = root[str(CLI_WIFI_PASSWORD)];
       for (unsigned int i = 0; i < values.size(); i++) {
-        add(str(CLI_WIFI_CREDENTIAL), values[i][0], values[i][1]);
+        add(str(CLI_WIFI_PASSWORD), values[i][0], values[i][1]);
       }
     }
    
@@ -38,18 +38,18 @@ void Credential::init() {
 }
 
 int Credential::count(String key) {
-   if (key == str(CLI_FACEBOOK_CREDENTIAL)) {
+   if (key == str(CLI_FACEBOOK_PASSWORD)) {
     return listFacebook->size();
-  } else if (key == str(CLI_WIFI_CREDENTIAL)) {
+  } else if (key == str(CLI_WIFI_PASSWORD)) {
     return listWifi->size();
   }
   return 0;
 }
 
 void Credential::add(String key, String user, String pass) {
-  if (key == str(CLI_FACEBOOK_CREDENTIAL)) {
+  if (key == str(CLI_FACEBOOK_PASSWORD)) {
     listFacebook->add(SocialAccount{user, pass});
-  }else if (key == str(CLI_WIFI_CREDENTIAL)) {
+  }else if (key == str(CLI_WIFI_PASSWORD)) {
     listWifi->add(SocialAccount{user, pass});
   }
 }
@@ -103,17 +103,17 @@ void Credential::save(String key, String name, String number) {
 }
 
 String Credential::getSocialUser(String key, int id) {
-  if (key == str(CLI_FACEBOOK_CREDENTIAL)) {
+  if (key == str(CLI_FACEBOOK_PASSWORD)) {
     return listFacebook->get(id).user;
-  } else if (key == str(CLI_WIFI_CREDENTIAL)) {
+  } else if (key == str(CLI_WIFI_PASSWORD)) {
     return listWifi->get(id).user;
   }
   return "";
 }
 String Credential::getSocialPass(String key, int id) {
- if (key == str(CLI_FACEBOOK_CREDENTIAL)) {
+ if (key == str(CLI_FACEBOOK_PASSWORD)) {
     return listFacebook->get(id).pass;
-  } else if (key == str(CLI_WIFI_CREDENTIAL)) {
+  } else if (key == str(CLI_WIFI_PASSWORD)) {
     return listWifi->get(id).pass;
   }
   return "";
@@ -130,9 +130,9 @@ void Credential::deleteIndex(String key, int id) {
   String data;
   root.printTo(data);
 
-  if (key == str(CLI_FACEBOOK_CREDENTIAL)) {
+  if (key == str(CLI_FACEBOOK_PASSWORD)) {
     listFacebook->remove(id);
-  } else if (key == str(CLI_WIFI_CREDENTIAL)) {
+  } else if (key == str(CLI_WIFI_PASSWORD)) {
     listWifi->remove(id);
   }
   if (!writeFile(FILE_PATH, data)) {
