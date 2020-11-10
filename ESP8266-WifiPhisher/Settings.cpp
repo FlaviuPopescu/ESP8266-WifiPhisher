@@ -31,8 +31,6 @@ void Settings::load() {
     setCaptiveType(data.get<uint8_t>(keyword(S_TYPE_CAPTIVE_PORTAL)));
 
   // GENERAL
- if (data.containsKey(keyword(S_LANG)))
-    setLang(data.get<String>(keyword(S_LANG)));
   if (data.containsKey(keyword(S_DISPLAYINTERFACE)))
     setDisplayInterface(data.get<bool>(keyword(S_DISPLAYINTERFACE)));
   if (data.containsKey(keyword(S_DISPLAY_TIMEOUT)))
@@ -152,7 +150,6 @@ String Settings::getJsonStr() {
 
 
   // GENERAL
-  data.set(keyword(S_LANG), lang);
   data.set(keyword(S_AUTOSAVE), autosave);
   data.set(keyword(S_AUTOSAVETIME), autosaveTime);
   data.set(keyword(S_DISPLAYINTERFACE), displayInterface);
@@ -265,8 +262,6 @@ void Settings::set(const char *str, String value) {
     setCaptiveType(value.toInt());
 
   // strings
-  else if (eqls(str, S_LANG))
-    setLang(value);
   else if (eqls(str, S_SSID))
     setSSID(value);
   else if (eqls(str, S_PASSWORD))
@@ -343,8 +338,6 @@ String Settings::get(const char *str) {
   // strings
   else if (eqls(str, S_SSID))
     return ssid;
-  else if (eqls(str, S_LANG))
-    return lang;
   else if (eqls(str, S_PASSWORD))
     return password;
   else if (eqls(str, S_MACAP))
