@@ -1,6 +1,5 @@
 #ifndef DisplayUI_h
 #define DisplayUI_h
-
 #include "A_config.h"
 #include "Alert.h"
 #include "Arduino.h"
