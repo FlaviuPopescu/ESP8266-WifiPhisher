@@ -1,6 +1,5 @@
 #ifndef Settings_h
 #define Settings_h
-
 #include "Arduino.h"
 #include <FS.h>
 extern "C" {
