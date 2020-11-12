@@ -1,6 +1,5 @@
 #ifndef WifiManager_h
 #define WifiManager_h
-
 #include "Arduino.h"
 #include <DNSServer.h>
 #include <ESP8266WebServer.h>
