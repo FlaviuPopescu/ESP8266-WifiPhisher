@@ -1,6 +1,5 @@
 
 #include "DisplayUI.h"
-// #include "images.h"
 
 // ===== adjustable ===== //
 void DisplayUI::configInit() {
