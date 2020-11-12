@@ -93,24 +93,14 @@ public:
     PACKETMONITOR,
     INTRO,
     HOME,
-    SETCLOCK,
     BRIGHTNESS,
     CAPTIVE,
     CREDENTIAL,
   };
 
-  enum SET_TIME {
-    SET_HOUR,
-    SET_MINUTE,
-    SET_DAY,
-    SET_MONTH,
-    SET_YEAR
-  };
-
   enum HOME_MODE { HOME_1, HOME_2, HOME_3, HOME_4 };
 
   uint8_t mode = DISPLAY_MODE::MENU;
-  uint8_t clock_set = SET_TIME::SET_HOUR;
 
   uint8_t home_mode = HOME_MODE::HOME_1;
 
@@ -146,7 +136,6 @@ public:
                                  const uint8_t *xbm);
   void drawImageCenterVertical(int16_t y, int16_t width, int16_t height,
                                const uint8_t *xbm);
-  // void drawSetBrightness();
   // ====================== //
 
   DisplayUI();
@@ -182,27 +171,20 @@ private:
   Menu scanMenu;
   Menu showMenu;
   Menu attackMenu;
-  Menu captiveMenu;
-  Menu captiveSelectMenu;
-  Menu credentialMenu;
-  Menu wifiMenu;
-  Menu wifiHackMenu;
-  Menu timeOnScreenMenu;
+  Menu SettingMenu;
 
   Menu apListMenu;
   Menu stationListMenu;
   Menu nameListMenu;
   Menu ssidListMenu;
-  Menu wifiListCaptiveScanMenu;
-  Menu wifiListCaptiveScanHackMenu;
-  Menu wifiCaptiveMenu;
-  Menu listWifiCredential;
-  Menu facebookListCaptiveScanHackMenu;
+  Menu WifiScanListMenu;
+  Menu WifiPasswordList;
+  Menu HackFacebookAccountMenu;
   Menu apMenu;
   Menu stationMenu;
   Menu nameMenu;
   Menu ssidMenu;
-  Menu listFacebookCredential;
+  Menu listFacebookAccount;
   void setupButtons();
 
   String getChannel();
@@ -219,7 +201,7 @@ private:
   void drawList();
   void drawGUI();
   void drawHome();
-  void drawSystemInfo();
+  void drawDISCLAIMER();
 
   void buttonUpdate();
 
@@ -249,10 +231,6 @@ private:
   void addMenuNode(Menu *menu, const char *ptr, std::function<void()> click);
   void addMenuNode(Menu *menu, const char *ptr, Menu *next);
 
-  // fake clock
-  // void setClock();
-
-  uint32_t clockTime = 0;
   int oldBrighness = 50;
   bool isFistOnScreen = true;
   int frame = 0;
