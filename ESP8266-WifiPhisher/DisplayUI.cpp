@@ -1,4 +1,3 @@
-// :)
 
 #include "DisplayUI.h"
 // #include "images.h"
@@ -15,7 +14,6 @@ void DisplayUI::configInit() {
 
   display.clear();
   display.display();
-  setTime(hour(), minute(), second(), day(), month(), year());
 }
 
 void DisplayUI::configOn() {
@@ -101,19 +99,18 @@ void DisplayUI::setup() {
   buttonTime = currentTime;
 
   // ===== MENUS ===== //
-  //
-  // MAIN MENU apple_bits
+
   createMenu(&mainMenu, NULL, DISPLAY_GUI, [this]() {
     addMenuNode(&mainMenu, scan_bits, D_SCAN, &scanMenu);       /// SCAN
     addMenuNode(&mainMenu, show_bits, D_SHOW, &showMenu);       // SHOW
     addMenuNode(&mainMenu, attack_bits, D_ATTACK, &attackMenu); // ATTACK
    
-    addMenuNode(&mainMenu, captive_portal_bits, D_HACKWIFI, &wifiListCaptiveScanHackMenu); //Hack wifi
-    createMenu(&wifiListCaptiveScanHackMenu, &mainMenu, DISPLAY_LIST, [this]() {
+    addMenuNode(&mainMenu, Hack_Wifi_bits, D_HACKWIFI, &WifiScanListMenu); //Hack wifi
+    createMenu(&WifiScanListMenu, &mainMenu, DISPLAY_LIST, [this]() {
                int c = accesspoints.count();
                for (int i = 0; i < c; i++) {
                  addMenuNode(
-                     &wifiListCaptiveScanHackMenu,
+                     &WifiScanListMenu,
                      [i]() {
                        return b2a(accesspoints.getSelected(i)) +
                               accesspoints.getSSID(i);
@@ -156,12 +153,12 @@ void DisplayUI::setup() {
                      });
                }
              });
-    addMenuNode(&mainMenu, facebook_bits, D_FACEBOOK1, &facebookListCaptiveScanHackMenu); // Hack Facebook
-    createMenu(&facebookListCaptiveScanHackMenu, &mainMenu, DISPLAY_LIST, [this]() {
+    addMenuNode(&mainMenu, facebook_bits, D_FACEBOOK1, &HackFacebookAccountMenu); // Hack Facebook
+    createMenu(&HackFacebookAccountMenu, &mainMenu, DISPLAY_LIST, [this]() {
       int c = accesspoints.count();
                for (int i = 0; i < c; i++) {
                  addMenuNode(
-                  &facebookListCaptiveScanHackMenu,
+                  &HackFacebookAccountMenu,
                   [i]() {
                        return b2a(accesspoints.getSelected(i)) +
                               accesspoints.getSSID(i);
@@ -206,16 +203,16 @@ void DisplayUI::setup() {
                      });
                }
              });
-    addMenuNode(&mainMenu, pass_wifi_bits, D_WIFI1, &listWifiCredential); // List Password wifi
-    addMenuNode(&mainMenu, facebook1_bits, D_FACEBOOK, &listFacebookCredential); //list Password Facebook
+    addMenuNode(&mainMenu, pass_wifi_bits, D_WIFI1, &WifiPasswordList); // List Password wifi
+    addMenuNode(&mainMenu, facebook1_bits, D_FACEBOOK, &listFacebookAccount); //list Password Facebook
     addMenuNode(&mainMenu, monitor_bits, D_PACKET_MONITOR,        // Monitor
                  [this]() { // PACKET MONITOR
                    scan.start(SCAN_MODE_SNIFFER, 0, SCAN_MODE_OFF, 0, false,
                               wifi_channel);
                    mode = DISPLAY_MODE::PACKETMONITOR;
                  });
-    addMenuNode(&mainMenu, time_on_screen_bits, D_SETTING, &timeOnScreenMenu);  // Setting
-    addMenuNode(&mainMenu, menu_info_bits, D_INFO, [this]() { // Info
+    addMenuNode(&mainMenu, time_on_screen_bits, D_SETTING, &SettingMenu);  // Setting
+    addMenuNode(&mainMenu, Disclaimer_bits, D_DISCLAIMER, [this]() { // DISCLAIMER
       mode = DISPLAY_MODE::HOME;
       display.setFont(DejaVu_Sans_Mono_12);
       display.setTextAlignment(TEXT_ALIGN_LEFT);
@@ -270,9 +267,9 @@ void DisplayUI::setup() {
         &ssidListMenu);
   });
 
-  createMenu(&timeOnScreenMenu, &mainMenu, DISPLAY_LIST, [this]() {
+  createMenu(&SettingMenu, &mainMenu, DISPLAY_LIST, [this]() {
      addMenuNode(             //attack timeout
-        &timeOnScreenMenu,
+        &SettingMenu,
         [this]() { // START
           return leftRight(str(D_SET_ATTACK_TIMEOUT),
                            String(settings.getAttackTimeout()) + "s",
@@ -300,7 +297,7 @@ void DisplayUI::setup() {
         });
 
 addMenuNode(
-        &timeOnScreenMenu,   // DeauthPerPackets
+        &SettingMenu,   // DeauthPerPackets
         [this]() { // START
           return leftRight(str(D_DEAUTH_PACKET), // D_DEAUTH_PACKET
                            String(settings.getDeauthsPerTarget()),
@@ -331,7 +328,7 @@ addMenuNode(
 
 
 addMenuNode(
-        &timeOnScreenMenu,
+        &SettingMenu,
         [this]() { // 
           return leftRight(str(S_DISPLAY_TIMEOUT), // DISPLAY_TIMEOUT
                            String(settings.getDisplayTimeout()),
@@ -362,7 +359,7 @@ addMenuNode(
         });
 
 addMenuNode(
-        &timeOnScreenMenu,
+        &SettingMenu,
         [this]() { // 
           return leftRight(str(D_SET_FORCE_PACKETS), // FORCE_PACKETS
                            String(settings.getForcePackets()),
@@ -394,7 +391,7 @@ addMenuNode(
 
 
 addMenuNode(
-        &timeOnScreenMenu,
+        &SettingMenu,
         [this]() { // START
           return leftRight(str(D_MIN_DEAUTH), // D_MIN_DEAUTH
                            String(settings.getMinDeauths()),
@@ -426,7 +423,7 @@ addMenuNode(
         
     //ProbesPerSSID
     addMenuNode(
-        &timeOnScreenMenu,
+        &SettingMenu,
         [this]() { // START
           return leftRight(str(S_PROBESPERSSID1), // PROBEPERSSID
                            String(settings.getProbesPerSSID()),
@@ -456,7 +453,7 @@ addMenuNode(
           configInit();
         });
 addMenuNode(
-        &timeOnScreenMenu,
+        &SettingMenu,
         [this]() { // START
           return leftRight(str(D_DEAUTH_REASON1), // DEAUTH_REASON
                            String(settings.getDeauthReason()),
@@ -486,7 +483,7 @@ addMenuNode(
         });
 
 addMenuNode(
-        &timeOnScreenMenu,
+        &SettingMenu,
         [this]() { // START
           return leftRight(str(S_CHANNEL), // CHANNEL
                            String(settings.getChannel()),
@@ -516,7 +513,7 @@ addMenuNode(
         });
 
 addMenuNode(
-        &timeOnScreenMenu,
+        &SettingMenu,
         [this]() { // START
           return leftRight(str(S_CHANNEL_TIME1), // CHANNEL_time
                            String(settings.getChTime()),
@@ -546,7 +543,7 @@ addMenuNode(
         });
 
 addMenuNode(
-        &timeOnScreenMenu,
+        &SettingMenu,
 [this]() {   //reset
           return leftRight(str(D_RESET),   // Deauth_Reason
            String(settings.getDeauthReason()),
@@ -561,7 +558,7 @@ addMenuNode(
         SPIFFS.format();
         ESP.restart();
       } else {
-        changeMenu(&timeOnScreenMenu);
+        changeMenu(&SettingMenu);
       }
       configInit();
 
@@ -569,12 +566,12 @@ addMenuNode(
         
   });
 
-createMenu(&listFacebookCredential, &mainMenu, DISPLAY_LIST, [this]() {
+createMenu(&listFacebookAccount, &mainMenu, DISPLAY_LIST, [this]() {
     // add APs to list
     int c = credential.count(str(CLI_FACEBOOK_PASSWORD));
     for (int i = 0; i < c; i++) {
       addMenuNode(
-          &listFacebookCredential,
+          &listFacebookAccount,
           [i]() {
             return "Acc: " +
                    credential.getSocialUser(str(CLI_FACEBOOK_PASSWORD), i) +
@@ -590,21 +587,21 @@ createMenu(&listFacebookCredential, &mainMenu, DISPLAY_LIST, [this]() {
               alert.showSuccess(str(D_SUCCESS_ALERT));
             }
             configInit();
-            changeMenu(&listFacebookCredential);
+            changeMenu(&listFacebookAccount);
           });
     }
     if (c == 0) {
-      addMenuNode(&listFacebookCredential, D_EMPTY, [this]() { // SELECT ALL
+      addMenuNode(&listFacebookAccount, D_EMPTY, [this]() { // SELECT ALL
         changeMenu(&mainMenu);
       });
     }
   });
-  createMenu(&listWifiCredential, &mainMenu, DISPLAY_LIST, [this]() {
+  createMenu(&WifiPasswordList, &mainMenu, DISPLAY_LIST, [this]() {
     // add APs to list
     int c = credential.count(str(CLI_WIFI_PASSWORD));
     for (int i = 0; i < c; i++) {
       addMenuNode(
-          &listWifiCredential,
+          &WifiPasswordList,
           [i]() {
             return "ssid: " +
                    credential.getSocialUser(str(CLI_WIFI_PASSWORD), i) +
@@ -619,46 +616,17 @@ createMenu(&listFacebookCredential, &mainMenu, DISPLAY_LIST, [this]() {
               alert.showSuccess(str(D_SUCCESS_ALERT));
             }
             configInit();
-            changeMenu(&listWifiCredential);
+            changeMenu(&WifiPasswordList);
           });
     }
     if (c == 0) {
-      addMenuNode(&listWifiCredential, D_EMPTY, [this]() { // SELECT ALL
+      addMenuNode(&WifiPasswordList, D_EMPTY, [this]() { // SELECT ALL
         changeMenu(&mainMenu);
       });
     }
   });
 
 
-  createMenu(&wifiListCaptiveScanMenu, &wifiCaptiveMenu, DISPLAY_LIST,
-             [this]() {
-               int c = accesspoints.count();
-
-               for (int i = 0; i < c; i++) {
-                 addMenuNode(
-                     &wifiListCaptiveScanMenu,
-                     [i]() {
-                       return b2a(accesspoints.getSelected(i)) +
-                              accesspoints.getSSID(i);
-                     },
-                     [this, i]() {
-                       if (accesspoints.getSelected(i)) {
-                         accesspoints.deselectAll();
-                         //  settings.
-                       } else {
-                         accesspoints.deselectAll();
-                         accesspoints.select(i);
-                         settings.setSSID(accesspoints.getSSID(i));
-                       }
-
-                       configInit();
-                     },
-                     [this, i]() {
-                       // selectedID = i;
-                       // changeMenu(&apMenu);
-                     });
-               }
-             });
 
   createMenu(&apListMenu, &showMenu, DISPLAY_LIST, [this]() {
     // add APs to list
@@ -1124,7 +1092,6 @@ void DisplayUI::update() {
 
 void DisplayUI::on() {
   if (enabled) {
-    WiFi.mode(WIFI_OFF);
     configOn();
     tempOff = false;
     buttonTime = currentTime; // update a button time to keep display on
@@ -1144,7 +1111,6 @@ void DisplayUI::setupButtons() {
   a = new ButtonPullup(BUTTON_A);
   b = new ButtonPullup(BUTTON_B);
 
-  // game.up
   // === BUTTON UP === //
   up->setOnClicked([this]() {
     scrollCounter = 0;
@@ -1332,10 +1298,6 @@ void DisplayUI::draw() {
       drawLoadingScan();
       break;
 
-      // case DISPLAY_MODE::BRIGHTNESS:
-      //   drawSetBrightness();
-      //   break;
-
     case DISPLAY_MODE::PACKETMONITOR:
       drawPacketMonitor();
       break;
@@ -1409,15 +1371,9 @@ void DisplayUI::drawList() {
 void DisplayUI::drawGUI() {
   if (currentMenu->selected < 0) {
     currentMenu->selected = 0;
-    // if (currentMenu == &credentialMenu) {
-    //   mode = DISPLAY_MODE::HOME;
-    // }
 
   } else if (currentMenu->selected >= currentMenu->list->size()) {
     currentMenu->selected = currentMenu->list->size() - 1;
-    // if (currentMenu == &credentialMenu) {
-    //   mode = DISPLAY_MODE::HOME;
-    // }
   }
 
   int size = currentMenu->list->size();
@@ -1506,48 +1462,27 @@ void DisplayUI::drawIntro() {
   drawString(2, center(F("Github.com/244v234"), 20));
   drawString(3, center(F("Hackster.io/244v234"), 20));
   drawString(4, center(F("-------*****-------"), 20));
-  delay(4000);
 }
 
 void DisplayUI::drawHome() {
   switch (home_mode) {
   case HOME_MODE::HOME_1:
-    drawSystemInfo();
+    drawDISCLAIMER();
     break;
   }
 }
 
 
-void DisplayUI::drawSystemInfo() {
-  // char s[150];
-  FSInfo fs_info;
-  SPIFFS.info(fs_info);
+void DisplayUI::drawDISCLAIMER() {
   display.setFont(DejaVu_Sans_Mono_10);
-  drawString(0, center("System Info", 20));
-  drawString(1, center("RAM", 20));
-  drawString(1, leftRight("Type", "FS", 20));
-
-  drawString(2, center(String(81920 / 1024) + "Kb", 20));
-  drawString(2,
-             leftRight("Total", String(fs_info.totalBytes / 1024) + "Kb", 20));
-
-  drawString(
-      3, center(String(100 - system_get_free_heap_size() / (81920 / 100)) + "%",
-                20));
-  drawString(
-      3, leftRight("Usage",
-                   String(fs_info.usedBytes / (fs_info.totalBytes / 100)) + "%",
-                   20));
-
-  drawString(
-      4, center(String(system_get_free_heap_size() / (81920 / 100)) + "%", 20));
-  drawString(4, leftRight("Free",
-                          String((fs_info.totalBytes - fs_info.usedBytes) /
-                                 (fs_info.totalBytes / 100)) +
-                              "%",
-                          20));
-
+  drawString(0, center(F("*****DISCLAIMER*****"), 20));
+  drawString(1, center(F("Use this project"), 20));
+  drawString(2, center(F("only for testing"), 20));
+  drawString(3, center(F("and"), 20));
+  drawString(4, center(F("educational purposes"), 20));
 }
+
+
 
 void DisplayUI::clearMenu(Menu *menu) {
   while (menu->list->size() > 0) {
