@@ -1,5 +1,4 @@
 #include "Arduino.h"
-
 #define menu_image_width 32
 #define menu_image_height 32
 
