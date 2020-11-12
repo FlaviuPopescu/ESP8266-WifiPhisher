@@ -16,11 +16,6 @@ struct SocialAccount {
   String pass;
 };
 
-struct Phone {
-  String name;
-  String phone;
-};
-
 class Credential {
 public:
   Credential();
@@ -34,8 +29,6 @@ public:
   void deleteAll();
   String getSocialUser(String key, int id);
   String getSocialPass(String key, int id);
-  String getPhone(int id);
-  String getName(int id);
   void setNameWifi(String name);
 
   void toSerial();
