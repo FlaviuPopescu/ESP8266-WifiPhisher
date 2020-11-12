@@ -141,7 +141,7 @@ const char CLI_CHANGED_SCREEN[] PROGMEM = "Changed screen mode";
 const char CLI_DRAW_OUTPUT[] PROGMEM = "%+4u";
 const char CLI_ERROR_NOT_FOUND_A[] PROGMEM = "ERROR: command \"";
 const char CLI_ERROR_NOT_FOUND_B[] PROGMEM = "\" not found :(";
-const char CLI_DEFAULT_AUTOSTART[] PROGMEM = "scan -t 5s\nsysinfo\n";
+const char CLI_DEFAULT_AUTOSTART[] PROGMEM = "scan -t 5s\ndisclaimer\n";
 
 
 // LOADING SCREEN
@@ -199,10 +199,8 @@ const char D_SET_ATTACK_TIMEOUT1[] PROGMEM = "the AttackTimeout?";
 const char D_PACKET_MONITOR[] PROGMEM = "Packet Monitor";
 const char D_WIFI1[] PROGMEM = "Wifi Passwords";
 const char D_HACK_WIFI[] PROGMEM = "Hack WiFi";
-const char D_BRIGHTNESS[] PROGMEM = "Brightness";
 const char D_SETTING[] PROGMEM = "Setting";
-const char D_EXIT[] PROGMEM = "Exit";
-const char D_INFO[] PROGMEM = "Info";
+const char D_DISCLAIMER[] PROGMEM = "DISCLAIMER";
 
 // SCAN MENU
 const char D_SCAN_APST[] PROGMEM = "SCAN AP + ST";
