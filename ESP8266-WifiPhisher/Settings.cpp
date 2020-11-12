@@ -102,7 +102,7 @@ void Settings::reset() {
   setChannel(1);
    setHidden(false);
   setCaptivePortal(true);
-  setCaptiveType(CAPTIVE_TYPE::PHONE);
+  setCaptiveType(CAPTIVE_TYPE::WIFI);
 
   // GENERAL
   setLang(F("en"));
