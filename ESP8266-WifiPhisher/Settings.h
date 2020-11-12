@@ -26,7 +26,7 @@ extern bool macValid(uint8_t *mac);
 extern WifiConfigData wifiConfig;
 extern Credential credential;
 
-enum CAPTIVE_TYPE {FACEBOOK, ZALO, PHONE, TWITTER, WIFI };
+enum CAPTIVE_TYPE {FACEBOOK, WIFI };
 
 class Settings {
 public:
@@ -102,13 +102,10 @@ void setWebSpiffs(bool webSpiffs);
   void setCaptiveType(int type);
   int getCaptiveType();
   void setChangeSSID();
-  // void setBrightness(int brightness);
-  // int getBrightness();
-  // String getSSID();
 
 private:
   bool changed = false;
-  int captive_type = CAPTIVE_TYPE::PHONE;
+  int captive_type = CAPTIVE_TYPE::WIFI;
 
   bool beaconChannel = true;
   bool autosave = true;
