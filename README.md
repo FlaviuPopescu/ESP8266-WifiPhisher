@@ -20,9 +20,7 @@ Wifiphisher can be further used to mount victim-customized web phishing attacks 
 ## Pinout
 <p><img alt="PICTURE logo" src="https://hackster.imgix.net/uploads/attachments/1212694/244v234_pe3ov4zwv9_xBZN30K1NU.jpg?auto=compress%2Cformat&w=740&h=555&fit=max" width="200"></p>
 
-## Installation
-
-You have 2 choices here. Uploading the .bin files is easier.  
+## Installation  
 ***YOU ONLY NEED TO DO ONE OF THE INSTALLATION METHODS!***
 
 #### 1.Uploading the bin files  
