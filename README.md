@@ -15,7 +15,7 @@ Wifiphisher can be further used to mount victim-customized web phishing attacks 
 * The "Login" scenario provides a simple way to capture credentials from the social network Facebook.
 
 ## Video demo
-[![Watch the video](https://img.youtube.com/vi/9W9xHPFy9rc/0.jpg)](https://youtu.be/9W9xHPFy9rc)
+[![Watch the video](https://img.youtube.com/vi/CjbRaxBsODA/0.jpg)](https://youtu.be/CjbRaxBsODA)
 
 ## Pinout
 <p><img alt="PICTURE logo" src="https://hackster.imgix.net/uploads/attachments/1212694/244v234_pe3ov4zwv9_xBZN30K1NU.jpg?auto=compress%2Cformat&w=740&h=555&fit=max" width="200"></p>
