@@ -1,8 +1,9 @@
-/*ESP8266 WifiPhisher
+/*
+ESP8266 WifiPhisher
  * https://github.com/244v234/ESP8266-WifiPhisher
  * https://hackster.io.com/244v234
  * 244v234@gmail.com
- */
+*/
 extern "C" {
 #include "user_interface.h"
 }
