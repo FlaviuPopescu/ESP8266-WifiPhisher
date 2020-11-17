@@ -1460,7 +1460,7 @@ void DisplayUI::drawIntro() {
   drawString(1, center(F("by 244v234"), 20));
   drawString(2, center(F("Github.com/244v234"), 20));
   drawString(3, center(F("Hackster.io/244v234"), 20));
-  drawString(4, center(F("-------*****-------"), 20));
+  drawString(4, center(F("wifiphisher.tk"), 20));
 }
 
 void DisplayUI::drawHome() {
