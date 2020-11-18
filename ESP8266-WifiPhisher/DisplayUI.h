@@ -1,10 +1,12 @@
 #ifndef DisplayUI_h
 #define DisplayUI_h
+
 #include "A_config.h"
 #include "Alert.h"
 #include "Arduino.h"
 #include "Attack.h"
 #include "Credential.h"
+#include "DeviceSleep.h"
 #include "Keyboard.h"
 #include "Names.h"
 #include "SSIDs.h"
@@ -32,7 +34,7 @@ extern WifiConfigData wifiConfig;
 
 extern Alert alert;
 extern Keyboard keyboard;
-
+extern DeviceSleep deviceSleep;
 extern uint32_t currentTime;
 
 extern String leftRight(String a, String b, int len);
