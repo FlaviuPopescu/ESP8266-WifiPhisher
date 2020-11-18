@@ -9,11 +9,6 @@
 ## ESP8266 WifiPhisher
 Wifiphisher can be further used to mount victim-customized web phishing attacks against the connected clients in order to capture credentials (e.g. from third party login pages or WPA/WPA2 Pre-Shared Keys) by using an inexpensive ESP8266 WiFi SoC (System On A Chip).
 
-## Main feature
-* The deauthentication attack, is used to disconnect devices from their WiFi network.	
-* It is capable of performing a social engineering attack to get a secret WPA / WPA2 password
-* The "Login" scenario provides a simple way to capture credentials from the social network Facebook.
-
 ## Video demo
 [![Watch the video](https://img.youtube.com/vi/CjbRaxBsODA/0.jpg)](https://youtu.be/CjbRaxBsODA)
 
