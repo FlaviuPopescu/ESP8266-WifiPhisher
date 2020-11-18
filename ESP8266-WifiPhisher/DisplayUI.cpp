@@ -288,7 +288,7 @@ void DisplayUI::setup() {
 
             if (timeout.length() > 0) {
               if (keyboard.isNumber(timeout)) {
-                if (timeout.toInt() > 0) {
+                if (timeout.toInt() >= 0) {
                   settings.setAttackTimeout(timeout.toInt());
                   alert.showSuccess(str(D_SUCCESS_ALERT));
                 }
