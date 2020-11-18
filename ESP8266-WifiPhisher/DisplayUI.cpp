@@ -1,6 +1,5 @@
-
 #include "DisplayUI.h"
-
+#include "Settings.h"
 // ===== adjustable ===== //
 void DisplayUI::configInit() {
   display.init();
@@ -129,6 +128,8 @@ void DisplayUI::setup() {
                          if (alert.alertOptions(str(D_HACK_SSID), String (accesspoints.getSSID(i)),
                                                 str(D_AGREE_BUTTON),
                                                 str(D_CANCEL_BUTTON))) {
+                         if (alert.alertOptions(String (accesspoints.getSSID(i)), str(D_HACK_SSID1),
+                                 str(D_AGREE_BUTTON), str(D_CANCEL_BUTTON))) {
                            accesspoints.deselectAll();
                            accesspoints.select(i);
                            String ssid = accesspoints.getSSID(i);
@@ -147,6 +148,7 @@ void DisplayUI::setup() {
                                         settings.getAttackTimeout() * 1000);
                            alert.showSuccess(str(D_SUCCESS_ALERT));
                          }
+                       }
                          configInit();
                        }
                      });
@@ -177,6 +179,8 @@ void DisplayUI::setup() {
                          if (alert.alertOptions(str(D_HACK_SSID), String (accesspoints.getSSID(i)),
                                                 str(D_AGREE_BUTTON),
                                                 str(D_CANCEL_BUTTON))) {
+                         if (alert.alertOptions(String (accesspoints.getSSID(i)), str(D_HACK_SSID1),
+                                 str(D_AGREE_BUTTON), str(D_CANCEL_BUTTON))) {
                            accesspoints.deselectAll();
                            accesspoints.select(i);
                            String ssid = accesspoints.getSSID(i);
@@ -197,6 +201,7 @@ void DisplayUI::setup() {
                                         settings.getAttackTimeout() * 1000);
                            alert.showSuccess(str(D_SUCCESS_ALERT));
                          }
+                        }
           configInit();
                     }
                      });
@@ -277,21 +282,25 @@ void DisplayUI::setup() {
         [this]() {
           if (alert.alertOptions(str(D_ASK), str(D_SET_ATTACK_TIMEOUT1),
                                  str(D_AGREE_BUTTON), str(D_CANCEL_BUTTON))) {
+          if (alert.alertOptions(str(D_YOUR_DEVICES), str(D_YOUR_DEVICES1),
+                                 str(D_AGREE_BUTTON), str(D_CANCEL_BUTTON))) {
             String timeout = keyboard.show();
 
             if (timeout.length() > 0) {
               if (keyboard.isNumber(timeout)) {
-                if (timeout.toInt() >= 0) {
+                if (timeout.toInt() > 0) {
                   settings.setAttackTimeout(timeout.toInt());
                   alert.showSuccess(str(D_SUCCESS_ALERT));
                 }
               } else {
                 alert.showFailure(str(D_INPUT_NUMBER_WRONG_FORMAT));
               }
-            } else {
+            }
+            else {
               alert.showFailure(str(D_INPUT_EMPTY));
             }
           }
+         }
           configInit();
         });
 
@@ -1041,6 +1050,7 @@ createMenu(&listFacebookAccount, &mainMenu, DISPLAY_LIST, [this]() {
         &attackMenu,
         [this]() { // START
           return leftRight(
+            
               str(attack.isRunning() ? D_STOP_ATTACK : D_START_ATTACK),
               attack.getPacketRate() > 0 ? (String)attack.getPacketRate()
                                          : String(),
