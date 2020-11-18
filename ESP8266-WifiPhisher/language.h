@@ -1,5 +1,6 @@
 #ifndef language_h
 #define language_h
+
 #include "Arduino.h"
 
 extern String str(const char *ptr);
@@ -238,8 +239,6 @@ const char D_RESET2[] PROGMEM = "Do you want to";
 const char D_MESSAGE_RESET_DEVICE1[] PROGMEM = "factory reset?";
 
 // STATUS INDICATOR
-const char D_SUCCESS[] PROGMEM = "Success";
-
 const char D_TITLE_TURN_ON_CAPTIVE[] PROGMEM = "Turn on";
 const char D_TITLE_TURN_OFF_CAPTIVE[] PROGMEM = "Turn off";
 const char D_TITLE_DELETE_PASSWORD[] PROGMEM = "delete this password?";
@@ -259,6 +258,9 @@ const char D_CANCEL_BUTTON[] PROGMEM = "No";
 const char D_YES_BUTTON[] PROGMEM = "Yes";
 const char D_AGREE_BUTTON[] PROGMEM = "Yes";
 const char D_SUCCESS_ALERT[] PROGMEM = "Success!";
+const char D_YOUR_DEVICES[] PROGMEM = "Are you using it with";
+const char D_YOUR_DEVICES1[] PROGMEM = "your own devices?";
+const char D_DEEP_SLEEP[] PROGMEM = "Deep sleep is enabled";
 const char D_WAIT_REBOOT[] PROGMEM = "Wait until reboot";
 const char D_ATTACKALL_ALERT[] PROGMEM = "Attack all running";
 const char D_STOPATTACK_ALERT[] PROGMEM = "Attack has stopped";
@@ -266,6 +268,7 @@ const char D_FAILURE_ALERT[] PROGMEM = "Failure";
 const char D_SET_NEW_SSID[] PROGMEM = "Set new ssid";
 const char D_SET_PASS_FOR_SSID[] PROGMEM = "ssid with password";
 const char D_HACK_SSID[] PROGMEM = "Hack this ssid?";
+const char D_HACK_SSID1[] PROGMEM = "owned by you?";
 const char D_SET_ATTACK_TIMEOUT[] PROGMEM = "AttackTimeout";
 const char D_INPUT_NUMBER_WRONG_FORMAT[] PROGMEM = "Just accept number";
 const char D_INPUT_EMPTY[] PROGMEM = "Empty number";
