@@ -182,8 +182,4 @@ void loop() {
     displayUI.off();
     deviceSleep.sleep();
   }
-
-
-
-  
 }
