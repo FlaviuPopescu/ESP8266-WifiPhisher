@@ -1,9 +1,8 @@
-/*
-ESP8266 WifiPhisher
+/*ESP8266 WifiPhisher
  * https://github.com/244v234/ESP8266-WifiPhisher
- * https://hackster.io.com/244v234
+ * https://hackster.io/244v234
  * 244v234@gmail.com
-*/
+ */
 extern "C" {
 #include "user_interface.h"
 }
@@ -19,6 +18,7 @@ extern "C" {
 #include "CLI.h"
 #include "Credential.h"
 #include "Alert.h"
+#include "DeviceSleep.h"
 #include "DisplayUI.h"
 #include "Keyboard.h"
 #include "Names.h"
@@ -46,7 +46,7 @@ WifiConfigData wifiConfig;
 
 Alert alert;
 Keyboard keyboard;
-
+DeviceSleep deviceSleep;
 #include "wifi.h"
 
 uint32_t autosaveTime = 0;
@@ -118,7 +118,7 @@ void setup() {
   wifiConfig.init();
   credential.init();
   alert.setupButton();
-
+  deviceSleep.setup();
   credential.toSerial();
   wifiConfig.toSerial();
 
@@ -177,6 +177,13 @@ void loop() {
     booted = true;
     digitalWrite(D4, HIGH);
   }
+  if(digitalRead(12) == LOW && digitalRead(14) == LOW) {
+    alert.showSuccess(str(D_DEEP_SLEEP));
+    displayUI.off();
+    deviceSleep.sleep();
+  }
+
+
 
   
 }
