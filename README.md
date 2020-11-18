@@ -23,9 +23,7 @@ Wifiphisher can be further used to mount victim-customized web phishing attacks 
 ## Installation  
 ***YOU ONLY NEED TO DO ONE OF THE INSTALLATION METHODS!***
 
-#### 1.Uploading the bin files  
-
-* Download the current release from [releases](https://github.com/244v234/ESP8266-WifiPhisher/releases)  
+#### 1.Uploading the .bin files  
 
 * Upload using the ESP8266 flash tool of your choice:  
 	- [nodemcu-flasher](https://github.com/nodemcu/nodemcu-flasher) [Windows only]  
@@ -38,7 +36,7 @@ If it's not working, you can try using the Arduino as descriped below.
 
 #### 2.Compiling the source with Arduino
 First you have to install and open the Arduino IDE.
-* Add the required [libraries](https://drive.google.com/drive/folders/1QKlt-UVW6BszD1YrvQ47xcYCMHJUfeuS?usp=sharing)
+* Add the required libraries
 * In Arduino go to File -> Preferences add both URLs in Additional Boards Manager URLs https://raw.githubusercontent.com/SpacehuhnTech/arduino/main/package_spacehuhn_index.json
 * Go to Tools -> Board -> Boards Manager, search "deauther" and install Deauther ESP8266 Boards
 * Select your board at Tools -> Board and be sure it is at Deauther ESP8266 Boards (and not at ESP8266 Modules)!
