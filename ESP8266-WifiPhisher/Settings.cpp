@@ -122,7 +122,7 @@ void Settings::reset() {
   setMinDeauths(3);
 
   // ATTACK
-  setAttackTimeout(0);
+  setAttackTimeout(600);
   setForcePackets(3);
   setDeauthsPerTarget(30);
   setDeauthReason(1);
