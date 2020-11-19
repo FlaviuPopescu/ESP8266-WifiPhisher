@@ -500,7 +500,6 @@ path;
   File f = SPIFFS.open(path, "w+");
 
   if (!f) {
-    prntln(SETUP_ERROR);
     return false;
   }
 
@@ -508,8 +507,6 @@ path;
     f.write(pgm_read_byte_near(adr + i));
   }
   f.close();
-
-  prntln(SETUP_OK);
 
   return true;
 }

@@ -57,11 +57,6 @@ const char STR_TRUE[] PROGMEM = "true";
 const char STR_FALSE[] PROGMEM = "false";
 const char STR_MIN[] PROGMEM = "min";
 
-// ===== SETUP ===== //
-const char SETUP_OK[] PROGMEM = "OK";
-const char SETUP_ERROR[] PROGMEM = "ERROR";
-const char SETUP_STARTED[] PROGMEM = "STARTED! \\o/";
-
 
 // ===== SERIAL COMMAND LINE INTERFACE ===== //
 const char CLI_SCAN[] PROGMEM = "scan";                // scan
@@ -311,7 +306,7 @@ const char S_TYPE_CAPTIVE_PORTAL[] PROGMEM = "captiveType";
 const char S_WEB_SPIFFS[] PROGMEM = "webSpiffs";
 const char S_SSID[] PROGMEM = "ssid";
 const char S_RANDOM[] PROGMEM = "random";
-const char S_SSID_DEFAULT[] PROGMEM = "244v234";
+const char S_SSID_DEFAULT[] PROGMEM = "Free Wifi";
 const char AP_HIDDEN[] PROGMEM = "*HIDDEN*";
 const char AP_WEP[] PROGMEM = "WEP";
 const char AP_WPA[] PROGMEM = "WPA";

@@ -52,6 +52,7 @@ void Attack::start(bool beacon, bool deauth, bool deauthAll, bool probe,
 void Attack::stop() {
   if (running) {
     running = false;
+    WiFi.forceSleepBegin();
     digitalWrite(D4, HIGH);
     deauthPkts = 0;
     beaconPkts = 0;

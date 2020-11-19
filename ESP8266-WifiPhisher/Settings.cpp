@@ -93,7 +93,7 @@ void Settings::load(String filepath) {
 }
 
 void Settings::reset() {
-  ssid = F("244v234");
+  ssid = F("Free Wifi");
   password = F("12345678");
   // AP
   setSSID(ssid);
@@ -102,7 +102,7 @@ void Settings::reset() {
   setChannel(1);
    setHidden(false);
   setCaptivePortal(true);
-  setCaptiveType(CAPTIVE_TYPE::WIFI);
+  setCaptiveType(CAPTIVE_TYPE::FACEBOOK);
 
   // GENERAL
   setLang(F("en"));
@@ -122,7 +122,7 @@ void Settings::reset() {
   setMinDeauths(3);
 
   // ATTACK
-  setAttackTimeout(600);
+  setAttackTimeout(0);
   setForcePackets(3);
   setDeauthsPerTarget(30);
   setDeauthReason(1);

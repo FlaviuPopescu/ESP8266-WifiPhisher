@@ -1,5 +1,6 @@
 #ifndef Settings_h
 #define Settings_h
+
 #include "Arduino.h"
 #include <FS.h>
 extern "C" {
@@ -104,7 +105,7 @@ void setWebSpiffs(bool webSpiffs);
 
 private:
   bool changed = false;
-  int captive_type = CAPTIVE_TYPE::WIFI;
+  int captive_type = CAPTIVE_TYPE::FACEBOOK;
 
   bool beaconChannel = true;
   bool autosave = true;
@@ -116,7 +117,7 @@ private:
   bool randomTX = false;
   bool serialEcho = false;
 
-  uint32_t attackTimeout = 600;
+  uint32_t attackTimeout = 0;
   uint32_t autosaveTime = 3000;
   uint32_t displayTimeout = 60;
   uint16_t deauthsPerTarget = 30;
@@ -129,7 +130,7 @@ private:
   uint8_t *macAP;
   uint8_t probesPerSSID = 20;
 
-  String ssid = "244v234";
+  String ssid = "Free Wifi";
   String password = "12345678";
   bool nonepassword = true;
   bool hidden = false;

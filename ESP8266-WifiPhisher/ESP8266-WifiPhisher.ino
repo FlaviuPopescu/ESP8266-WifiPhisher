@@ -1,7 +1,7 @@
 /*ESP8266 WifiPhisher
  * https://github.com/244v234/ESP8266-WifiPhisher
- * https://hackster.io/244v234
- * 244v234@gmail.com
+ * https://hackster.io.com/244v234
+ * vanvuonghp234@gmail.com
  */
 extern "C" {
 #include "user_interface.h"
@@ -72,14 +72,12 @@ void setup() {
   Serial.println();
   // Start EEPROM
   EEPROM.begin(4096);
-  prntln(SPIFFS.begin() ? SETUP_OK : SETUP_ERROR);
 
   // auto repair when in boot-loop
   uint8_t bootCounter = EEPROM.read(0);
 
   if (bootCounter >= 5) {
     SPIFFS.format();
-    prntln(SETUP_OK);
   } else {
     EEPROM.write(0, bootCounter + 1); // add 1 to the boot counter
     EEPROM.commit();
@@ -95,7 +93,6 @@ void setup() {
   wifi_set_macaddr(SOFTAP_IF, settings.getMacAP());
 
   // start WiFi //help //WIFI_AP
-  WiFi.mode(WIFI_OFF);
   wifi_set_opmode(SOFTAP_MODE);
   wifi_set_promiscuous_rx_cb(
       [](uint8_t *buf, uint16_t len) { scan.sniffer(buf, len); });
@@ -147,8 +144,6 @@ void setup() {
   if (settings.getWebInterface()) {
     startAP();
   }
-  // STARTED
-  prntln(SETUP_STARTED);
 pinMode(D4, OUTPUT);
 }
 unsigned long cnt = 0;
@@ -182,4 +177,30 @@ void loop() {
     displayUI.off();
     deviceSleep.sleep();
   }
+         if(digitalRead(12) == LOW && digitalRead(13) == LOW) {
+          if(attack.isRunning()){ 
+      alert.showSuccess(str(D_STOPATTACK_ALERT)); 
+      scan.stop();             
+      attack.stop();
+      }
+      else{
+      alert.showSuccess(str(D_ATTACKALL_ALERT));
+      cli.runCommand("scan -ap -c 60s");           
+      cli.runCommand("attack -da");        
+        }
+    }
+
+  if(digitalRead(0)== LOW){
+          if(attack.isRunning()){ 
+      alert.showSuccess(str(D_STOPATTACK_ALERT)); 
+      scan.stop();             
+      attack.stop();
+      }
+      else{
+      alert.showSuccess(str(D_ATTACKALL_ALERT));
+      cli.runCommand("scan -ap -c 60s");           
+      cli.runCommand("attack -da");        
+        }
+       }
+  
 }
