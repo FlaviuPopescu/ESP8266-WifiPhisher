@@ -23,7 +23,9 @@ Wifiphisher can be further used to mount victim-customized web phishing attacks 
 #### 2.Compiling the source with Arduino
 First you have to install and open the Arduino IDE.
 * Add the required libraries
-* In Arduino go to File -> Preferences add both URLs in Additional Boards Manager URLs https://raw.githubusercontent.com/SpacehuhnTech/arduino/main/package_spacehuhn_index.json
+* In Arduino go to File -> Preferences add both URLs in Additional Boards Manager URLs 
+https://raw.githubusercontent.com/SpacehuhnTech/arduino/main/package_spacehuhn_index.json
+http://arduino.esp8266.com/stable/package_esp8266com_index.json
 * Go to Tools -> Board -> Boards Manager, search "deauther" and install Deauther ESP8266 Boards
 * Select your board at Tools -> Board and be sure it is at Deauther ESP8266 Boards (and not at ESP8266 Modules)!
 * Download the source code for this project from the releases page. You can also clone the project to get the latest changes, but you will also get the latest bugs ;)
