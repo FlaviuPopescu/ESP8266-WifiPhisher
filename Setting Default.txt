@@ -45,6 +45,7 @@ probesPerSSID = 20;
 How many probe request frames are sent for each SSID.
 
 Quickly attack all surrounding wireless networks by pressing the "FLASH" button.
+Or press the "up" button and the "down" button at the same time.
 Every 60s it automatically refreshes the attack list.
 
 Put the device in deep sleep mode by pressing the up and selector buttons simultaneously.
