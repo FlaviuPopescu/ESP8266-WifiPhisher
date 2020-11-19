@@ -177,30 +177,6 @@ void loop() {
     displayUI.off();
     deviceSleep.sleep();
   }
-         if(digitalRead(12) == LOW && digitalRead(13) == LOW) {
-          if(attack.isRunning()){ 
-      alert.showSuccess(str(D_STOPATTACK_ALERT)); 
-      scan.stop();             
-      attack.stop();
-      }
-      else{
-      alert.showSuccess(str(D_ATTACKALL_ALERT));
-      cli.runCommand("scan -ap -c 60s");           
-      cli.runCommand("attack -da");        
-        }
-    }
 
-  if(digitalRead(0)== LOW){
-          if(attack.isRunning()){ 
-      alert.showSuccess(str(D_STOPATTACK_ALERT)); 
-      scan.stop();             
-      attack.stop();
-      }
-      else{
-      alert.showSuccess(str(D_ATTACKALL_ALERT));
-      cli.runCommand("scan -ap -c 60s");           
-      cli.runCommand("attack -da");        
-        }
-       }
   
 }
