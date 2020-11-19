@@ -119,7 +119,6 @@ void DisplayUI::setup() {
                                  str(D_TITLE_SET_STOP_WIFI_HACKING), "",
                                  str(D_AGREE_BUTTON), str(D_CANCEL_BUTTON))) {
                            attack.stop();
-                           WiFi.mode(WIFI_OFF);
                          }
                          accesspoints.deselectAll();
                          alert.showSuccess(str(D_SUCCESS_ALERT));
@@ -138,6 +137,7 @@ void DisplayUI::setup() {
                                    str(D_AGREE_BUTTON), str(D_CANCEL_BUTTON))) {
                              ssid = keyboard.show(accesspoints.getSSID(i));
                            }
+                           WiFi.mode(WIFI_STA);
                            settings.setCaptiveType(CAPTIVE_TYPE::WIFI);
                            settings.setNonePassword(true);
                            settings.setSSID(ssid);
@@ -170,7 +170,6 @@ void DisplayUI::setup() {
                                  str(D_TITLE_SET_STOP_WIFI_HACKING), "",
                                  str(D_AGREE_BUTTON), str(D_CANCEL_BUTTON))) {
                            attack.stop();
-                           WiFi.mode(WIFI_OFF);
                          }
                          accesspoints.deselectAll();
                          alert.showSuccess(str(D_SUCCESS_ALERT));
@@ -189,8 +188,7 @@ void DisplayUI::setup() {
                                    str(D_AGREE_BUTTON), str(D_CANCEL_BUTTON))) {
                              ssid = keyboard.show(accesspoints.getSSID(i));
                            }
-            settings.setCaptivePortal(true);
-            settings.save(true);
+            WiFi.mode(WIFI_STA); 
             settings.setCaptiveType(CAPTIVE_TYPE::FACEBOOK);
             settings.setNonePassword(true);
             settings.setSSID(ssid);
@@ -288,7 +286,7 @@ void DisplayUI::setup() {
 
             if (timeout.length() > 0) {
               if (keyboard.isNumber(timeout)) {
-                if (timeout.toInt() >= 0) {
+                if (timeout.toInt() > 0) {
                   settings.setAttackTimeout(timeout.toInt());
                   alert.showSuccess(str(D_SUCCESS_ALERT));
                 }
@@ -1468,8 +1466,8 @@ void DisplayUI::drawIntro() {
   display.setFont(DejaVu_Sans_Mono_10);
   drawString(0, center(F("ESP8266 WifiPhisher"), 20));
   drawString(1, center(F("by 244v234"), 20));
-  drawString(2, center(F("Github.com/244v234"), 20));
-  drawString(3, center(F("Hackster.io/244v234"), 20));
+  drawString(2, center(F("Hackster.io/244v234"), 20));
+  drawString(3, center(F("Github.com/244v234"), 20));
   drawString(4, center(F("wifiphisher.tk"), 20));
 }
 
