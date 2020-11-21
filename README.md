@@ -33,7 +33,7 @@ http://arduino.esp8266.com/stable/package_esp8266com_index.json
 * Check your upload settings and press upload!
 
 ## :octocat: Contribute
-All contributions are welcome! Code, documentation, graphics, or even design suggestions are welcome; use GitHub to its fullest. Submit pull requests, contribute tutorials -- whatever you have to offer, it'll be appreciated
+All contributions are welcome! Code, documentation, graphics, or even design suggestions are welcome; use GitHub to its fullest. Submit pull requests, contribute tutorials -- whatever you have to offer, it'll be appreciated.
 
 ## Under Development
 Currently, the ESP8266 WifiPhisher has limited software capabilities. New firmware features will be added over time and will eventually reach the point where this project becomes the smallest hacking machine.
@@ -43,6 +43,6 @@ Usage of ESp8266 Wifiphisher for attacking infrastructures without prior mutual 
 
 ## Note
 * Beware of websites pretending to be related to the ESP8266 WifiPhisher Project. They may be distributing malware.
-* WifiPhisher does not work on esp32. There is no way to inject packets on the ESP32
+* WifiPhisher does not work on esp32. There is no way to inject packets on the ESP32.
 
 ##### This source code is built on Deauther
