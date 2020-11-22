@@ -10,7 +10,7 @@
 A super portable evil device, based on the ESP8266 board.
 
 ## Attacks
-At the moment, it is able to perform three attacks:
+
 
 - **Wi-Fi deauthentication attack**: Scan for WiFi devices, block selected connections.
 
