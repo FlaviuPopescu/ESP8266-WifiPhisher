@@ -11,7 +11,6 @@ A super portable evil device, based on the ESP8266 board.
 
 ## Attacks
 
-
 - **Wi-Fi deauthentication attack**: Scan for WiFi devices, block selected connections.
 
 - **Captive Portal**: it creates a "free hotspot" and redirects the users to a registration page, where they - hopefully - enter their usual facebook/password combination. Anyway, it never makes them sign in
