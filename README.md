@@ -6,8 +6,19 @@
 | 🌍 <a href="http://wifiphisher.tk">wifiphisher.tk</a><br>
 <br></p>
 
-## ESP8266 WifiPhisher
-Wifiphisher can be further used to mount victim-customized web phishing attacks against the connected clients in order to capture credentials (e.g. from third party login pages or WPA/WPA2 Pre-Shared Keys) by using an inexpensive ESP8266 WiFi SoC (System On A Chip).
+# ESP8266 WifiPhisher
+A super portable evil device, based on the ESP8266 board.
+
+## Attacks
+At the moment, it is able to perform three attacks:
+
+- **Wi-Fi deauthentication attack**: Scan for WiFi devices, block selected connections.
+
+- **Captive Portal**: it creates a "free hotspot" and redirects the users to a registration page, where they - hopefully - enter their usual facebook/password combination. Anyway, it never makes them sign in
+
+- **Evil Twin**: it looks for nearby protected networks and lets you select the target one, then it sets up an open access point with the same ESSID of the victim and it uses a captive portal to redirect the users to a page which requires the WiFi password "in order to complete the firmware upgrade".
+
+- **Beacon Spammer**: it spams multiple WiFi beacons to make appear many fake access points on the nearby devices.
 
 ## Video demo
 [![Watch the video](https://img.youtube.com/vi/CjbRaxBsODA/0.jpg)](https://youtu.be/CjbRaxBsODA)
