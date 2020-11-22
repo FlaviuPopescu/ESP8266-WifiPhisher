@@ -25,7 +25,6 @@ First you have to install and open the Arduino IDE.
 * Add the required libraries
 * In Arduino go to File -> Preferences add both URLs in Additional Boards Manager URLs 
 https://raw.githubusercontent.com/SpacehuhnTech/arduino/main/package_spacehuhn_index.json
-http://arduino.esp8266.com/stable/package_esp8266com_index.json
 * Go to Tools -> Board -> Boards Manager, search "deauther" and install Deauther ESP8266 Boards
 * Select your board at Tools -> Board and be sure it is at Deauther ESP8266 Boards (and not at ESP8266 Modules)!
 * Clone the project to get the latest changes, but you will also get the latest bugs ;)
