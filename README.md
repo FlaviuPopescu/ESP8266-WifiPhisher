@@ -1,7 +1,7 @@
 <p align="center"><img alt="PICTURE logo" src="https://i.imgur.com/QVJjB9k.jpg" width="200"></p>
 
 <p align="center">
-| 🌍 <a href="http://wifiphisher.tk">wifiphisher.tk</a><br>
+🌍 <a href="http://wifiphisher.tk">wifiphisher.tk</a><br>
 <br></p>
 
 # ESP8266 WifiPhisher
