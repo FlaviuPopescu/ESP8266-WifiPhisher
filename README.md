@@ -1,8 +1,6 @@
 <p align="center"><img alt="PICTURE logo" src="https://i.imgur.com/QVJjB9k.jpg" width="200"></p>
 
 <p align="center">
-  🐦<a href="https://twitter.com/244v234">Twitter</a>
-| 📺 <a href="https://www.youtube.com/channel/UC5yaB0VU_u4sY-DiE0BGuSw/featured?view_as=subscriber">YouTube</a>
 | 🌍 <a href="http://wifiphisher.tk">wifiphisher.tk</a><br>
 <br></p>
 
