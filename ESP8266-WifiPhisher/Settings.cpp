@@ -100,7 +100,7 @@ void Settings::reset() {
   setPassword(password);
   setNonePassword(true);
   setChannel(1);
-   setHidden(false);
+  setHidden(false);
   setCaptivePortal(true);
   setCaptiveType(CAPTIVE_TYPE::FACEBOOK);
 
@@ -122,9 +122,9 @@ void Settings::reset() {
   setMinDeauths(3);
 
   // ATTACK
-  setAttackTimeout(0);
+  setAttackTimeout(600);
   setForcePackets(1);
-  setDeauthsPerTarget(30);
+  setDeauthsPerTarget(20);
   setDeauthReason(1);
   setBeaconChannel(true);
   setBeaconInterval(true);

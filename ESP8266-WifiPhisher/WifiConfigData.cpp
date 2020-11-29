@@ -87,45 +87,7 @@ void WifiConfigData::add(bool selected, String ssid, String pass) {
 }
 
 unsigned long timeout = 60000; // 1 minute
-bool WifiConfigData::smartconfig() {
-  initLCD();
 
-  WiFi.mode(WIFI_STA);
-  isSuccess = false;
-  WiFi.disconnect();
-
-  WiFi.beginSmartConfig();
-  unsigned long wait = millis();
-
-  int frame = 0;
-
-  while (millis() - wait < timeout) {
-    if (frame < (sizeof(hourglass) / sizeof(hourglass[0])) - 1) {
-      frame = frame + 1;
-    } else {
-      frame = 0;
-    }
-    display.clear();
-    int progress = map(millis() - wait, 0, timeout, 0, 100);
-    display.drawXbm(42, 0, 32, 32, hourglass[frame]);
-    display.drawProgressBar(4, 50, 120, 6, progress);
-    display.drawString(40, 34, F("watting..."));
-    display.display();
-    if (WiFi.smartConfigDone()) {
-      isSuccess = true;
-      break;
-    }
-    isSuccess = false;
-    delay(100);
-  }
-
-  if (isSuccess && WiFi.psk().length() >= 8 && WiFi.SSID().length() > 0) {
-    save(WiFi.SSID(), WiFi.psk());
-    add(false, WiFi.SSID().c_str(), WiFi.psk().c_str());
-    toSerial();
-  }
-  return isSuccess;
-}
 
 void WifiConfigData::disconnect() { WiFi.disconnect(); }
 

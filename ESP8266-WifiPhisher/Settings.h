@@ -117,10 +117,10 @@ private:
   bool randomTX = false;
   bool serialEcho = false;
 
-  uint32_t attackTimeout = 0;
+  uint32_t attackTimeout = 600;
   uint32_t autosaveTime = 3000;
   uint32_t displayTimeout = 0;
-  uint16_t deauthsPerTarget = 30;
+  uint16_t deauthsPerTarget = 20;
   uint16_t chTime = 384;
   uint16_t minDeauths = 3;
   uint8_t forcePackets = 1;

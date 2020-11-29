@@ -1,5 +1,4 @@
 #include "DisplayUI.h"
-#include "Settings.h"
 // ===== adjustable ===== //
 void DisplayUI::configInit() {
   display.init();
@@ -84,8 +83,6 @@ void DisplayUI::drawImageCenterVertical(int16_t y, int16_t width,
   drawImage(screenWidth / 2 - width / 2, y, width, height, xbm);
 }
 
-// ====================== //
-
 DisplayUI::DisplayUI() {}
 
 DisplayUI::~DisplayUI() {}
@@ -119,6 +116,7 @@ void DisplayUI::setup() {
                                  str(D_TITLE_SET_STOP_WIFI_HACKING), "",
                                  str(D_AGREE_BUTTON), str(D_CANCEL_BUTTON))) {
                            attack.stop();
+                           WiFi.mode(WIFI_OFF);
                          }
                          accesspoints.deselectAll();
                          alert.showSuccess(str(D_SUCCESS_ALERT));
@@ -137,7 +135,7 @@ void DisplayUI::setup() {
                                    str(D_AGREE_BUTTON), str(D_CANCEL_BUTTON))) {
                              ssid = keyboard.show(accesspoints.getSSID(i));
                            }
-                           WiFi.mode(WIFI_STA);
+                           settings.setCaptivePortal(true);
                            settings.setCaptiveType(CAPTIVE_TYPE::WIFI);
                            settings.setNonePassword(true);
                            settings.setSSID(ssid);
@@ -145,7 +143,7 @@ void DisplayUI::setup() {
                            settings.setChangeSSID();
                            settings.save(true);
                            attack.start(false, true, false, false, true,
-                                        settings.getAttackTimeout() * 1000);
+                           settings.getAttackTimeout() * 1000);
                            alert.showSuccess(str(D_SUCCESS_ALERT));
                          }
                        }
@@ -170,6 +168,7 @@ void DisplayUI::setup() {
                                  str(D_TITLE_SET_STOP_WIFI_HACKING), "",
                                  str(D_AGREE_BUTTON), str(D_CANCEL_BUTTON))) {
                            attack.stop();
+                           WiFi.mode(WIFI_OFF);
                          }
                          accesspoints.deselectAll();
                          alert.showSuccess(str(D_SUCCESS_ALERT));
@@ -188,16 +187,16 @@ void DisplayUI::setup() {
                                    str(D_AGREE_BUTTON), str(D_CANCEL_BUTTON))) {
                              ssid = keyboard.show(accesspoints.getSSID(i));
                            }
-            WiFi.mode(WIFI_STA); 
+            settings.setCaptivePortal(true);
             settings.setCaptiveType(CAPTIVE_TYPE::FACEBOOK);
             settings.setNonePassword(true);
             settings.setSSID(ssid);
             credential.setNameWifi(accesspoints.getSSID(i));
             settings.setChangeSSID();
             settings.save(true);
-                           attack.start(false, true, false, false, true,
-                                        settings.getAttackTimeout() * 1000);
-                           alert.showSuccess(str(D_SUCCESS_ALERT));
+            attack.start(false, true, false, false, true,
+            settings.getAttackTimeout() * 1000);
+            alert.showSuccess(str(D_SUCCESS_ALERT));
                          }
                         }
           configInit();
@@ -272,7 +271,7 @@ void DisplayUI::setup() {
   createMenu(&SettingMenu, &mainMenu, DISPLAY_LIST, [this]() {
      addMenuNode(             //attack timeout
         &SettingMenu,
-        [this]() { // START
+        [this]() {
           return leftRight(str(D_SET_ATTACK_TIMEOUT),
                            String(settings.getAttackTimeout()) + "s",
                            maxLen - 1);
@@ -347,7 +346,7 @@ addMenuNode(
 
             if (DisplayTimeout.length() > 0) {
               if (keyboard.isNumber(DisplayTimeout)) {
-                if ( DisplayTimeout.toInt() >= 30) {
+                if ( DisplayTimeout.toInt() >= 20) {
                   settings.setDisplayTimeout(DisplayTimeout.toInt());
                   alert.showSuccess(str(D_SUCCESS_ALERT));
                 }
@@ -398,7 +397,7 @@ addMenuNode(
 
 addMenuNode(
         &SettingMenu,
-        [this]() { // START
+        [this]() { 
           return leftRight(str(D_MIN_DEAUTH), // D_MIN_DEAUTH
                            String(settings.getMinDeauths()),
                            maxLen - 1);
@@ -430,7 +429,7 @@ addMenuNode(
     //ProbesPerSSID
     addMenuNode(
         &SettingMenu,
-        [this]() { // START
+        [this]() { 
           return leftRight(str(S_PROBESPERSSID1), // PROBEPERSSID
                            String(settings.getProbesPerSSID()),
                            maxLen - 1);
@@ -460,7 +459,7 @@ addMenuNode(
         });
 addMenuNode(
         &SettingMenu,
-        [this]() { // START
+        [this]() { 
           return leftRight(str(D_DEAUTH_REASON1), // DEAUTH_REASON
                            String(settings.getDeauthReason()),
                            maxLen - 1);
@@ -490,7 +489,7 @@ addMenuNode(
 
 addMenuNode(
         &SettingMenu,
-        [this]() { // START
+        [this]() { 
           return leftRight(str(S_CHANNEL), // CHANNEL
                            String(settings.getChannel()),
                            maxLen - 1);
@@ -520,7 +519,7 @@ addMenuNode(
 
 addMenuNode(
         &SettingMenu,
-        [this]() { // START
+        [this]() {
           return leftRight(str(S_CHANNEL_TIME1), // CHANNEL_time
                            String(settings.getChTime()),
                            maxLen - 1);
@@ -1046,7 +1045,7 @@ createMenu(&listFacebookAccount, &mainMenu, DISPLAY_LIST, [this]() {
 
     addMenuNode(
         &attackMenu,
-        [this]() { // START
+        [this]() { 
           return leftRight(
             
               str(attack.isRunning() ? D_STOP_ATTACK : D_START_ATTACK),
@@ -1055,16 +1054,14 @@ createMenu(&listFacebookAccount, &mainMenu, DISPLAY_LIST, [this]() {
               maxLen - 1);
         },
         [this]() {
-          if (attack.isRunning())
-           { attack.stop();
-            WiFi.mode(WIFI_OFF);}
+          if (attack.isRunning()) attack.stop();
+            
           else
             attack.start(beaconSelected, deauthSelected, false, probeSelected,
                          true, settings.getAttackTimeout() * 1000);
         });
   });
 
-  // ===================== //
 
   // set current menu to main menu
   changeMenu(&mainMenu);
@@ -1219,6 +1216,7 @@ void DisplayUI::setupButtons() {
           currentMenu->list->get(currentMenu->selected).click();
         }
         break;
+        
 
       case DISPLAY_MODE::PACKETMONITOR:
       case DISPLAY_MODE::LOADSCAN:
@@ -1246,9 +1244,6 @@ void DisplayUI::setupButtons() {
               currentMenu->list->get(currentMenu->selected).hold();
             }
           }
-          // else if (mode == DISPLAY_MODE::SETCLOCK) {
-          //   mode = DISPLAY_MODE::MENU;
-          // }
         }
       },
       800);
@@ -1304,7 +1299,8 @@ void DisplayUI::draw() {
     case DISPLAY_MODE::LOADSCAN:
       drawLoadingScan();
       break;
-
+      
+      
     case DISPLAY_MODE::PACKETMONITOR:
       drawPacketMonitor();
       break;
@@ -1442,15 +1438,13 @@ void DisplayUI::drawPacketMonitor() {
        y = (sreenHeight - 1) - (scan.getPackets(i) * scale);
        i++;
 
-  //     // Serial.printf("%d,%d -> %d,%d\n", x, (sreenHeight-1), x, y);
        drawLine(x, (sreenHeight - 1), x, y);
         x++;
 
-  //     // Serial.printf("%d,%d -> %d,%d\n", x, (sreenHeight-1), x, y);
        drawLine(x, (sreenHeight - 1), x, y);
        x++;
      }
-  //   // Serial.println("---------");
+
    }
       if (scan.isScanning() && scan.deauths < settings.getMinDeauths()) digitalWrite(D4, LOW);
     else if (scan.deauths >= settings.getMinDeauths()) {
@@ -1468,7 +1462,7 @@ void DisplayUI::drawIntro() {
   drawString(1, center(F("by 244v234"), 20));
   drawString(2, center(F("Hackster.io/244v234"), 20));
   drawString(3, center(F("Github.com/244v234"), 20));
-  drawString(4, center(F("wifiphisher.tk"), 20));
+  drawString(4, center(F("Wifiphisher.tk"), 20));
 }
 
 void DisplayUI::drawHome() {
@@ -1482,7 +1476,7 @@ void DisplayUI::drawHome() {
 
 void DisplayUI::drawDISCLAIMER() {
   display.setFont(DejaVu_Sans_Mono_10);
-  drawString(0, center(F("*****DISCLAIMER*****"), 20));
+  drawString(0, center(F("**** DISCLAIMER ****"), 20));
   drawString(1, center(F("Use this project"), 20));
   drawString(2, center(F("only for testing"), 20));
   drawString(3, center(F("and"), 20));

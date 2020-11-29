@@ -57,6 +57,11 @@ const char STR_TRUE[] PROGMEM = "true";
 const char STR_FALSE[] PROGMEM = "false";
 const char STR_MIN[] PROGMEM = "min";
 
+// ===== SETUP ===== //
+const char SETUP_OK[] PROGMEM = "OK";
+const char SETUP_ERROR[] PROGMEM = "ERROR";
+const char SETUP_STARTED[] PROGMEM = "STARTED! \\o/";
+
 
 // ===== SERIAL COMMAND LINE INTERFACE ===== //
 const char CLI_SCAN[] PROGMEM = "scan";                // scan

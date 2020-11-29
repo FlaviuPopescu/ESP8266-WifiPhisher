@@ -1,10 +1,11 @@
-/*  
-  * ESP8266 WifiPhisher
-  * https://github.com/244v234/ESP8266-WifiPhisher
-  * https://hackster.io.com/244v234
-  * http://wifiphisher.tk
- */
 
+/*
+ * ESP8266 WifiPhisher
+ * https://github.com/244v234/ESP8266-WifiPhisher
+ * https://hackster.io.com/244v234
+ * http://wifiphisher.tk
+ */
+ 
 extern "C" {
 #include "user_interface.h"
 }
@@ -74,16 +75,7 @@ void setup() {
   Serial.println();
   // Start EEPROM
   EEPROM.begin(4096);
-
-  // auto repair when in boot-loop
-  uint8_t bootCounter = EEPROM.read(0);
-
-  if (bootCounter >= 5) {
-    SPIFFS.format();
-  } else {
-    EEPROM.write(0, bootCounter + 1); // add 1 to the boot counter
-    EEPROM.commit();
-  }
+  prntln(SPIFFS.begin() ? SETUP_OK : SETUP_ERROR);
 
   // get time
   currentTime = millis();
@@ -95,6 +87,7 @@ void setup() {
   wifi_set_macaddr(SOFTAP_IF, settings.getMacAP());
 
   // start WiFi //help //WIFI_AP
+  WiFi.mode(WIFI_OFF);
   wifi_set_opmode(SOFTAP_MODE);
   wifi_set_promiscuous_rx_cb(
       [](uint8_t *buf, uint16_t len) { scan.sniffer(buf, len); });
@@ -146,6 +139,8 @@ void setup() {
   if (settings.getWebInterface()) {
     startAP();
   }
+  // STARTED
+  prntln(SETUP_STARTED);
 pinMode(D4, OUTPUT);
 }
 unsigned long cnt = 0;
@@ -179,4 +174,6 @@ void loop() {
     displayUI.off();
     deviceSleep.sleep();
   }
+
+  
 }

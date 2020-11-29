@@ -27,7 +27,6 @@ class WifiConfigData {
 public:
   WifiConfigData();
   ~WifiConfigData();
-  bool smartconfig();
   void save(String ssid, String pass);
   void deleteAll();
   String get();
