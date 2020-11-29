@@ -109,7 +109,7 @@ void Settings::reset() {
   setAutosave(true);
   setAutosaveTime(5000);
   setDisplayInterface(USE_DISPLAY);
-  setDisplayTimeout(60);
+  setDisplayTimeout(0);
   setCLI(false);
   setSerialEcho(false);
   setWebInterface(true);
@@ -123,7 +123,7 @@ void Settings::reset() {
 
   // ATTACK
   setAttackTimeout(0);
-  setForcePackets(3);
+  setForcePackets(1);
   setDeauthsPerTarget(30);
   setDeauthReason(1);
   setBeaconChannel(true);
