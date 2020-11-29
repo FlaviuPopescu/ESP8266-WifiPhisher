@@ -18,7 +18,7 @@ A super portable evil device, based on the ESP8266 board.
 - **Beacon Spammer**: it spams multiple WiFi beacons to make appear many fake access points on the nearby devices.
 
 ## Video demo
-[![Watch the video](https://img.youtube.com/vi/CjbRaxBsODA/0.jpg)](https://youtu.be/CjbRaxBsODA)
+[![Watch the video](https://img.youtube.com/vi/pXWLexnZQmU/0.jpg)](https://youtu.be/pXWLexnZQmU)
 
 ## Pinout
 <p><img alt="PICTURE logo" src="https://hackster.imgix.net/uploads/attachments/1212694/244v234_pe3ov4zwv9_xBZN30K1NU.jpg?auto=compress%2Cformat&w=740&h=555&fit=max" width="200"></p>
