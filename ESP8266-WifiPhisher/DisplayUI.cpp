@@ -286,7 +286,7 @@ void DisplayUI::setup() {
 
             if (timeout.length() > 0) {
               if (keyboard.isNumber(timeout)) {
-                if (timeout.toInt() > 0) {
+                if (timeout.toInt() >= 0) {
                   settings.setAttackTimeout(timeout.toInt());
                   alert.showSuccess(str(D_SUCCESS_ALERT));
                 }
@@ -304,7 +304,7 @@ void DisplayUI::setup() {
 
 addMenuNode(
         &SettingMenu,   // DeauthPerPackets
-        [this]() { // START
+        [this]() { 
           return leftRight(str(D_DEAUTH_PACKET), // D_DEAUTH_PACKET
                            String(settings.getDeauthsPerTarget()),
                            maxLen - 1);
@@ -347,7 +347,7 @@ addMenuNode(
 
             if (DisplayTimeout.length() > 0) {
               if (keyboard.isNumber(DisplayTimeout)) {
-                if ( DisplayTimeout.toInt() >= 20) {
+                if ( DisplayTimeout.toInt() >= 30) {
                   settings.setDisplayTimeout(DisplayTimeout.toInt());
                   alert.showSuccess(str(D_SUCCESS_ALERT));
                 }
